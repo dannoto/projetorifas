@@ -80,9 +80,9 @@ if (ENVIRONMENT == "production") {
     $db['default'] = array(
 		'dsn'	=> '',
 		'hostname' => 'localhost',
-		'username' => 'u785878414_rifa',
-		'password' => 'Rifas2022*',
-		'database' => 'u785878414_rifa',
+		'username' => 'raffle29_daniel',
+		'password' => 'rTS@C!)PrU(A',
+		'database' => 'raffle29_rifas',
 		'dbdriver' => 'mysqli',
 		'dbprefix' => '',
 		'pconnect' => FALSE,

@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 if (ENVIRONMENT == "production") {
-    $config['base_url'] = 'https://ccoanantica.com/projetorifas';
+    $config['base_url'] = 'https://betraffle.com.br/';
 
 } else if (ENVIRONMENT == "development") {
 
