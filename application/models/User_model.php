@@ -51,6 +51,24 @@ class user_model extends CI_Model
         return $this->db->update('users', $data);
     }
 
+
+    public function Auth() {
+
+        if ($this->session->userdata('session_user')) {
+
+            if ($this->getUserById($this->session->userdata('session_user')['id']) ['user_status'] == 2) {
+
+                redirect(base_url('banido'));
+
+            } 
+
+        } else{
+
+            redirect(base_url('login'));
+            
+        }
+    }
+
  
 }
 ?>

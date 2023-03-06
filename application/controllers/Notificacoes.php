@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 require './vendor/autoload.php';
 
 
-class Pagamentos extends CI_Controller
+class Notificacoes extends CI_Controller
 {
     public function __construct()
     {
@@ -19,19 +19,6 @@ class Pagamentos extends CI_Controller
         $this->load->model('raffles_model');
         $this->load->model('payments_model');
         $this->load->model('cart_model');
-
-        $this->user_model->Auth();
-    }
-
-    public function index()
-    {
-
-
-        $data = array(
-            'pagamentos' => $this->payments_model->getUserPayment($this->session->userdata('session_user')['id']),
-        );
-
-        $this->load->view('user/pagamentos', $data);
     }
 
     function createPaymentConfig($order_id)
@@ -136,14 +123,13 @@ class Pagamentos extends CI_Controller
     public function status()
     {
 
-        $payments_id =  htmlspecialchars($this->input->get('payment_id'));
-        $reference_id = htmlspecialchars($this->input->get('preference_id'));
-        $payment_type = htmlspecialchars($this->input->get('payment_type'));
+        $json = json_decode(file_get_contents("php://input"));
+        $payments_id = $json->data->id;
+
+        $this->payments_model->addNotification($payments_id);
+
 
         $data = $this->checkPayment($payments_id);
-
-        print_r($data);
-
 
         // Pegando intenção de pagamento.
         $payment_data = $this->payments_model->getPaymentByOrder($data->external_reference);
@@ -169,34 +155,30 @@ class Pagamentos extends CI_Controller
 
             // Enviando E-mail
             $this->email_model->paymentApproved($user_data, $order_data);
-
         } else if ($data->status == "rejected") {
 
             $this->payments_model->updatePayment($payment_data['id'], 3);
 
             // Enviando E-mail
             $this->email_model->paymentRecused($user_data, $order_data);
-
         } else if ($data->status == "pending") {
 
             $this->payments_model->updatePayment($payment_data['id'], 2);
 
             // Enviando E-mail
             $this->email_model->paymentPending($user_data, $order_data);
-
         } else if ($data->status == "cancelled") {
 
             $this->payments_model->updatePayment($payment_data['id'], 3);
-            
+
             // Enviando E-mail
             $this->email_model->paymentRecused($user_data, $order_data);
-
         } else if ($data->status == "in_process") {
 
             $this->payments_model->updatePayment($payment_data['id'], 2);
 
-             // Enviando E-mail
-             $this->email_model->paymentPending($user_data, $order_data);
+            // Enviando E-mail
+            $this->email_model->paymentPending($user_data, $order_data);
         }
 
 
@@ -204,13 +186,13 @@ class Pagamentos extends CI_Controller
         if ($order_data['order_status'] = 1) {
             // Ordem já foi processada
             echo "Ordem já foi processada.";
-
+            
         } else if ($order_data['order_status'] = 0) {
             //  Ordem pendente
 
             $order_raffles = $this->getOrderRaffles($order_data['id']);
 
-            
+
             foreach ($order_raffles as $c) {
 
                 // Ordem da Rifa
@@ -240,93 +222,6 @@ class Pagamentos extends CI_Controller
 
             // Atualiza status da ordem 
             $this->payments_model->updateOrderStatus($order_data['id']);
-
-
-        }
-    }
-
-    public function credito()
-    {
-
-        if ($this->input->post()) {
-
-            $cart_user = $this->session->userdata('session_user')['id'];
-
-            if ($this->user_model->getUserById($cart_user)['user_credit'] >= $this->cart_model->getTotalCart()) {
-
-                $carrinho = $this->cart_model->getCart($cart_user);
-
-
-
-                //Pegando carrinho e adicionando tickets como comprados
-                foreach ($carrinho as $c) {
-
-                    //Criando pagamentos
-                    $payment_id = $this->payments_model->addPayment($c->cart_raffle, $c->cart_amount, '1', $c->cart_user, '1',  'credito', mt_rand());
-                    // $payment_id = $this->payments_model->addPayment($c->cart_raffle, $c->cart_amount, '3',$c->cart_user, 'mercadopago',  $payment_type, $payments_id, $reference_id);
-
-
-                    //Adicionando RafflesBuyed
-                    if (!$this->payments_model->checkBuyed($c->cart_raffle, $c->cart_user)) {
-
-                        $this->payments_model->addRafflesBuyed($c->cart_raffle, $payment_id, $c->cart_amount, $c->cart_user, date('d-m-Y'), date('H:i'), 0);
-                    } else {
-                        $old_amount = $this->payments_model->checkBuyed($c->cart_raffle, $c->cart_user)['raffles_amount'];
-                        $this->payments_model->updateRafflesBuyed($c->cart_raffle, $payment_id, $c->cart_amount, $old_amount, $c->cart_user);
-                    }
-
-                    foreach ($this->cart_model->getCartTickets($c->cart_raffle, $c->cart_user) as $t) {
-
-                        $ticket_raffle = $t->cart_raffle;
-                        $ticket_number = $t->cart_ticket;
-                        $ticket_user = $t->cart_user;
-                        $ticket_date = date('d-m-Y');
-                        $ticket_time =  date('H:i:s');
-                        $ticket_payment_id = mt_rand();
-                        $ticket_payment_type = 'credits';
-
-                        $this->payments_model->addTicketBuyed($ticket_raffle, $ticket_number, $ticket_user, $ticket_date, $ticket_time, $ticket_payment_id, $ticket_payment_type);
-                    }
-
-
-                    //Atualiza porcentagem do sorteio
-                    $raffles_tickets = $this->raffles_model->getRaffle($c->cart_raffle)['raffles_tickets'];
-                    $raffles_buyed = count($this->payments_model->checkBuyedTickets($c->cart_raffle, null));
-
-                    $this->raffles_model->updateProgress($c->cart_raffle, $raffles_tickets, $raffles_buyed);
-                }
-
-                //Subtrair créditos
-                $this->payments_model->decreaseCredit($cart_user, $this->cart_model->getTotalCart(), $this->user_model->getUserById($cart_user)['user_credit']);
-
-                //Limpando Carrinho
-
-                $this->cart_model->resetCartByUser($cart_user);
-
-                //Limpando carrinho ticket.
-                $this->cart_model->resetCartTicketsByUser($cart_user);
-
-
-
-
-                $data = array(
-                    'status' => 'true',
-                    'message' => 'Pagamento realizado com sucesso. <br> Aguarde o sorteio e boa sorte!'
-                );
-
-                redirect(base_url('perfil/sorteios'));
-            } else {
-                //SEM CREDITO
-                $data = array(
-                    'status' => 'false',
-                    'message' => 'Você não possui créditos suficientes.<br>Faça o pagamento por outro método.'
-                );
-
-                $this->load->view('pagamento/status/failed', $data);
-            }
-        } else {
-
-            redirect(base_url('carrinho'));
         }
     }
 }

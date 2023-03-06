@@ -12,7 +12,9 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"mercadopago/dx-php": "^2.5"
+		"mercadopago/dx-php": "^2.5",
+		"activecampaign/api-php": "^2.0",
+		"phpmailer/phpmailer": "^6.7"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

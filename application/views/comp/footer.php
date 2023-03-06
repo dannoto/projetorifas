@@ -1,16 +1,16 @@
 
 
 <section class=" footer  mt-12 ">
-    <div class="xl:ml-36 xl:mr-36 xl:m-5 footer-payments  grid xl:grid-cols-5 grid-cols-1 place-items-center">
+    <div class="xl:ml-36 xl:mr-36 xl:m-5 footer-payments  grid xl:grid-cols-4 grid-cols-1 place-items-center">
         <div class="xl:col-span-1 col-span-1 xl:mt-0 mt-3">
             <img src="<?=base_url()?>assets/img/icons/mais18.png" alt="">
         </div>
         <div class="xl:col-span-2 col-span-1 xl:mt-0 mt-3">
             <img src="<?=base_url()?>assets/img/icons/bandeiras.png" alt="">
         </div>
-        <div class="xl:col-span-1 col-span-1 xl:mt-0 mt-3">
+        <!-- <div class="xl:col-span-1 col-span-1 xl:mt-0 mt-3">
             <img src="<?=base_url()?>assets/img/icons/paypal.png" alt="">
-        </div>
+        </div> -->
         <div class="xl:col-span-1 col-span-1 xl:mt-0 mt-3">
             <img src="<?=base_url()?>assets/img/icons/mercadopago.png" alt="">
         </div>
@@ -21,13 +21,22 @@
         <div class="grid xl:grid-cols-6 ">
             <div class="xl:col-span-2  grid place-items-center ">
                 <div class=" ">
-                    <img class="footer-logo m-auto" src="<?=base_url()?>assets/img/logo.png" alt="">
+                    <img class="footer-logo m-auto" src="<?=base_url()?>assets/img/<?= $this->admin_model->getConfiguracoes()['configuracoes_logo'] ?>" alt="">
                 </div>
                 <div class="m-auto  ">
                     <ul class="flex  ">
-                        <li class="ml-3"><img src="<?=base_url()?>assets/img/icons/facebook.svg" alt=""></li>
-                        <li class="ml-3"><img src="<?=base_url()?>assets/img/icons/instagram.svg" alt=""></li>
-                        <li class="ml-3"><img src="<?=base_url()?>assets/img/icons/twitter.svg" alt=""></li>
+                        <li class="ml-3">
+                            <a href="<?= $this->admin_model->getConfiguracoes()['configuracoes_social_facebook'] ?>">
+                                <img src="<?=base_url()?>assets/img/icons/facebook.svg" alt=""></li>
+                            </a>
+                        <li class="ml-3">
+                            <a href="<?= $this->admin_model->getConfiguracoes()['configuracoes_social_instagram'] ?>">
+                                <img src="<?=base_url()?>assets/img/icons/instagram.svg" alt=""></li>
+                            </a>
+                        <li class="ml-3">
+                            <a href="<?= $this->admin_model->getConfiguracoes()['configuracoes_social_twitter'] ?>">
+                                <img src="<?=base_url()?>assets/img/icons/twitter.svg" alt=""></li>
+                            </a>
                     </ul>
                 </div>
 
@@ -64,8 +73,8 @@
                 <h1>Contato</h1>
                 <ul>    
                                     
-                    <li><i class="fas fa-phone ml-2"></i> (11) 9999-9999</li>
-                    <li><i class="fas fa-envelope ml-2"></i> sac@exemplo.com</li>
+                    <li><i class="fas fa-phone ml-2"></i> <?= $this->admin_model->getConfiguracoes()['configuracoes_contato_telefone'] ?></li>
+                    <li><i class="fas fa-envelope ml-2"></i> <?= $this->admin_model->getConfiguracoes()['configuracoes_contato_email'] ?></li>
                     
                 </ul>
             </div>

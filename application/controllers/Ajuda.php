@@ -10,11 +10,16 @@ class Ajuda extends CI_Controller {
 		$this->load->model('user_model');
 		$this->load->model('email_model');
 
+		$this->load->model('admin_model');
 
 	}
 	public function index()
 	{
-		$this->load->view('user/ajuda');
+
+		$data = array(
+            'faqs' => $this->admin_model->getFaqs(),
+        );
+        $this->load->view('user/ajuda', $data);
 	}
 
 }

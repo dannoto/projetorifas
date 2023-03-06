@@ -60,6 +60,89 @@ class Painel extends CI_Controller {
 
     }
 
+    public function actDeleteFaq() {
+
+        $faq_id =  htmlspecialchars($this->input->post('faq_id'));
+
+
+        if ($this->admin_model->deleteFaq($faq_id) ) {
+            $response =  array('status' => 'true', 'message' => 'Excluido com sucesso!');
+        }  else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
+        }
+
+        print_r(json_encode($response));
+    }
+
+    public function actAddFaq() {
+
+        $faq_title = htmlspecialchars($this->input->post('faq_title'));
+        $faq_content =  htmlspecialchars($this->input->post('faq_content'));
+
+
+        
+        if ($this->admin_model->addFaq($faq_title, $faq_content) ) {
+            $response =  array('status' => 'true', 'message' => 'Criado com sucesso!');
+        }  else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
+        }
+
+        print_r(json_encode($response));
+    }
+
+    //
+
+    public function actDeleteDepoimentos() {
+
+        $depoimentos_id =  htmlspecialchars($this->input->post('depoimentos_id'));
+
+
+        if ($this->admin_model->deleteDepoimentos($depoimentos_id) ) {
+            $response =  array('status' => 'true', 'message' => 'Excluido com sucesso!');
+        }  else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
+        }
+
+        print_r(json_encode($response));
+    }
+
+    public function actAddDepoimentos() {
+
+        $depoimentos_title = htmlspecialchars($this->input->post('depoimentos_title'));
+        $depoimentos_content =  htmlspecialchars($this->input->post('depoimentos_content'));
+
+
+        
+        if ($this->admin_model->addDepoimentos($depoimentos_title, $depoimentos_content) ) {
+            $response =  array('status' => 'true', 'message' => 'Criado com sucesso!');
+        }  else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
+        }
+
+        print_r(json_encode($response));
+    }
+    //
+    public function faq() {
+
+
+        
+        $data = array(
+            'faqs' => $this->admin_model->getFaqs(),
+        );
+        $this->load->view('admin/faq', $data);
+
+    }
+
+    public function depoimentos() {
+
+        $data = array(
+            'depoimentos' => $this->admin_model->getDepoimentos(),
+        );
+
+        $this->load->view('admin/depoimentos', $data);
+
+    }
+
 
     public function updateGateways() {
 
@@ -75,9 +158,64 @@ class Painel extends CI_Controller {
 
         $gateway_act_public = htmlspecialchars($this->input->post('gateway_act_public'));
         $gateway_act_secret = htmlspecialchars($this->input->post('gateway_act_secret'));
+        $gateway_act_list = htmlspecialchars($this->input->post('gateway_act_list'));
 
 
-        if ($this->admin_model->updateGateways($gateway_me_public, $gateway_me_secret, $gateway_pay_public , $gateway_pay_secret, $gateway_act_public ,  $gateway_act_secret ) ) {
+        if ($this->admin_model->updateGateways($gateway_me_public, $gateway_me_secret, $gateway_pay_public , $gateway_pay_secret, $gateway_act_public ,  $gateway_act_secret, $gateway_act_list ) ) {
+            $response =  array('status' => 'true', 'message' => 'Atualizado com sucesso!');
+        }  else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
+        }
+
+        print_r(json_encode($response));
+
+    }
+
+    public function updateLogo() {
+
+        if ($_FILES) {
+
+            $uploadPATH = './assets/img/';
+            $uploadNAME = mt_rand().basename($_FILES['configuracoes_logo']['name']);
+            $uploadPATHFULL = $uploadPATH.$uploadNAME;
+    
+            if (move_uploaded_file($_FILES['configuracoes_logo']['tmp_name'], $uploadPATHFULL)) {
+                $configuracoes_logo = $uploadNAME;
+    
+            } else {
+                $configuracoes_logo = "";
+    
+            }
+        }
+
+        if ($this->admin_model->updateLogo($configuracoes_logo ) ) {
+            $response =  array('status' => 'true', 'message' => 'Atualizado com sucesso!');
+        }  else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
+        }
+
+        print_r(json_encode($response));
+
+    }
+
+    public function updateConfiguracoes() {
+
+        
+        $response = array();
+
+        // $raffles_user = $this->session->userdata('session_admin')['admin']; 
+        $configuracoes_social_facebook = htmlspecialchars($this->input->post('configuracoes_social_facebook'));
+        $configuracoes_social_twitter = htmlspecialchars($this->input->post('configuracoes_social_twitter'));
+        $configuracoes_social_instagram = htmlspecialchars($this->input->post('configuracoes_social_instagram'));
+        
+        $configuracoes_contato_telefone = htmlspecialchars($this->input->post('configuracoes_contato_telefone'));
+        $configuracoes_contato_email = htmlspecialchars($this->input->post('configuracoes_contato_email'));
+
+        $configuracoes_logo = htmlspecialchars($this->input->post('configuracoes_logo'));
+
+
+
+        if ($this->admin_model->updateConfiguracoes($configuracoes_social_facebook, $configuracoes_social_twitter, $configuracoes_social_instagram , $configuracoes_contato_telefone, $configuracoes_contato_email ,  $configuracoes_logo ) ) {
             $response =  array('status' => 'true', 'message' => 'Atualizado com sucesso!');
         }  else {
             $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
@@ -160,8 +298,10 @@ class Painel extends CI_Controller {
             $raffles_category = htmlspecialchars($this->input->post('raffles_category'));
             $raffles_date = date('d/m/Y');
             $raffles_time = date('H:i:s');
+            $raffles_featured = htmlspecialchars($this->input->post('raffles_featured'));
 
-            if ($this->raffles_model->addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user) ) {
+
+            if ($this->raffles_model->addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured) ) {
 				$response =  array('status' => 'true', 'message' => 'Sorteio criado com sucesso!');
             }  else {
                 $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
@@ -208,8 +348,10 @@ class Painel extends CI_Controller {
             $raffles_category = htmlspecialchars($this->input->post('raffles_category'));
             $raffles_date = date('d/m/Y');
             $raffles_time = date('H:i:s');
+            $raffles_featured = htmlspecialchars($this->input->post('raffles_featured'));
 
-            if ($this->raffles_model->updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user) ) {
+
+            if ($this->raffles_model->updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user,  $raffles_featured) ) {
 				$response =  array('status' => 'true', 'message' => 'Sorteio atualizado com sucesso!');
             }  else {
                 $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
@@ -344,10 +486,21 @@ class Painel extends CI_Controller {
 
 
         $data = array (
+            'pagamentos' => $this->admin_model->getPagamentos()
+        );
+
+        $this->load->view('admin/pagamentos', $data);
+
+    }
+
+    public function configuracoes() {
+
+
+        $data = array (
 
         );
 
-        $this->load->view('admin/sorteios');
+        $this->load->view('admin/configuracoes');
 
     }
 
@@ -425,6 +578,7 @@ class Painel extends CI_Controller {
 	}
 
     public function baniruser() {
+
         if ($this->input->post() ) {
 
             $response = array();
@@ -433,7 +587,15 @@ class Painel extends CI_Controller {
 			$user_id = htmlspecialchars($this->input->post('user_id'));
 			$user_status = htmlspecialchars($this->input->post('user_status'));
 
+            $user_data = $this->user_model->getUserById($user_id);
+
             if ($this->register_model->banirUser($user_id, $user_status)) {
+
+                if ($user_status == "1") {
+
+                    $this->email_model->banUser($user_data);
+                }
+
                 $response =  array('status' => 'true', 'message' => 'Banido com sucesso.');
 
             } else {

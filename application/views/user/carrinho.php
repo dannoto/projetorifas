@@ -158,7 +158,7 @@
                         </div>
 
                         <div class="xl:ml-5 xl:mr-5 mb-0 xl:mt-0 mt-5  m-3">
-                            <button onclick="checkout.open()" class="bg-orange text-black mb-5 font-bold w-full  px-3 py-3">CONCLUIR PAGAMENTO <i class="fas ml-3  fa-chevron-right text-black"></i></button>
+                            <button onclick="createOrder()" class="bg-orange text-black mb-5 font-bold w-full  px-3 py-3">CONCLUIR PAGAMENTO <i class="fas ml-3  fa-chevron-right text-black"></i></button>
                         </div>
 
                         <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_credit'] >= $this->cart_model->getTotalCart()) { ?>
@@ -204,14 +204,46 @@
 
     <!-- <div class="cho-container"></div> -->
     <script>
-        const mp = new MercadoPago('TEST-706b7ac3-82e7-4160-acb1-34af8a109feb', {
-            locale: 'pt-BR'
-        });
-        const checkout = mp.checkout({
-            preference: {
-                id: 'YOUR_PREFERENCE_ID' // Indique o ID da preferência
-            }
-        });
+
+    </script>
+    <script>
+        function createOrder() {
+
+            $.ajax({
+                method: 'POST',
+                url: '<?= base_url() ?>pagamentos/createPaymentOrder',
+                data: {
+                    'order_type': 1
+                },
+                success: function(data) {
+
+                    var resp = JSON.parse(data)
+
+                    if (resp.status == "true") {
+
+                        const mp = new MercadoPago( '<?=$this->admin_model->getGateways()['gateway_me_public']?>', {
+                            locale: 'pt-BR'
+                        });
+                        const checkout = mp.checkout({
+                            preference: {
+                                id: resp.preference_id
+                            }
+                        });
+
+                        checkout.open()
+
+                    } else {
+
+                        swal(resp.message)
+
+                    }
+
+                },
+                error: function(data) {
+                    swal('Ocorreu um erro temporário.');
+                },
+            });
+        }
     </script>
 
 

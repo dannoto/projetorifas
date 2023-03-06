@@ -33,7 +33,7 @@ class Recuperacao extends CI_Controller {
 
 				$user_data = $this->user_model->getUserByEmail($user_email);
 
-				if ($this->email_model->sendRecovery($user_data['user_email'], $user_data['user_token'])) {
+				if ($this->email_model->sendRecovery($user_data)) {
 
 					$response = array('status' => 'true', 'message' => 'Enviamos um e-mail para você.');
 

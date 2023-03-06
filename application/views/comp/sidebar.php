@@ -63,6 +63,13 @@
           </a>
         </div>
         <div class="col-span-1" >
+          <a id="menu-logout"  href="<?=base_url() ?>pagamentos">
+            <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="far fa-credit-card fa-lg" style='font-weight: 300;'></i></span>
+              <p>Pagamentos</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-span-1" >
           <a id="menu-logout"  href="<?=base_url() ?>sair/">
             <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="far fa-sign-out fa-lg" style='font-weight: 300;'></i></span>
               <p>Sair</p>

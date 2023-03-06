@@ -19,7 +19,12 @@ class Carrinho extends CI_Controller
 		$this->load->model('email_model');
 		$this->load->model('cart_model');
 		$this->load->model('raffles_model');
+		$this->load->model('admin_model');
+
+		$this->user_model->Auth();
+
 	}
+
 	public function index()
 	{
 
@@ -28,38 +33,35 @@ class Carrinho extends CI_Controller
 		// TEST-4954716499435933-021512-74056596bbb48acd647eba5659de1a06-542182298
 
 		// Adicione as credenciais
-		MercadoPago\SDK::setAccessToken('TEST-4954716499435933-021512-74056596bbb48acd647eba5659de1a06-542182298');
+		// 		MercadoPago\SDK::setAccessToken('TEST-4954716499435933-021512-74056596bbb48acd647eba5659de1a06-542182298');
 
-		// Cria um objeto de preferência
-		$preference = new MercadoPago\Preference();
+		// 		// Cria um objeto de preferência
+		// 		$preference = new MercadoPago\Preference();
 
-		// Cria um item na preferência
-		$item = new MercadoPago\Item();
-		$item->title = 'Meu produto';
-		$item->quantity = 1;
-		$item->unit_price = 75.56;
-		$preference->items = array($item);
-
-		// $preference->back_urls = array(
-		// 	"success" => base_url() . 'status',
-		// 	"failure" => base_url() . 'status',
-		// 	"pending" => base_url() . 'status',
-		// );
-		// $preference->notification_url = base_url('notifications');
-		// $preference->external_reference = $order_id;
-
-		// $preference->auto_return = "approved";
-
-		$preference->save();
-
-		print_r($preference);
+		// 		// Cria um item na preferência
+		// 		$item = new MercadoPago\Item();
+		// 		$item->title = 'BetRaffle Sorteios';
+		// 		$item->quantity = 1;
+		// 		$item->unit_price = $this->cart_model->getTotalCart();
+		// 		$preference->items = array($item);
 
 
-		$data = array(
-			'cart' => $this->cart_model->getCart($this->session->userdata('session_user')['id']),
-		);
+		// 		$preference->back_urls = array(
+		//  			"success" => base_url() . 'pagamentos/status',
+		// 			"failure" => base_url() . 'pagamentos/status',
+		// 			"pending" => base_url() . 'pagamentos/status',
+		// 		);
+		// 		$preference->notification_url = base_url('notifications');
+		// 		$preference->external_reference = $this->session->userdata('session_user')['id'];
 
-		$this->load->view('user/carrinho', $data);
+		// 		$preference->auto_return = "approved";
+
+		// 		$preference->save();
+
+		// // 		print_r($preference);
+
+
+
 
 
 		// Cria um objeto de preferência
@@ -107,6 +109,12 @@ class Carrinho extends CI_Controller
 		// } else {
 		// 	echo "erro";
 		// }
+
+		$data = array(
+			'cart' => $this->cart_model->getCart($this->session->userdata('session_user')['id']),
+		);
+
+		$this->load->view('user/carrinho', $data);
 	}
 
 
@@ -260,7 +268,7 @@ class Carrinho extends CI_Controller
 		$cart_user = htmlspecialchars($this->input->post('cart_user'));
 		$cart_data = date('d-m-Y');
 		$cart_time = date('H:i');
-		$cart_expiration = date('H:i', strtotime($cart_time . '+30 minutes'));
+		$cart_expiration = date('H:i', strtotime($cart_time . '+20 minutes'));
 		$cart_status = 1;
 
 

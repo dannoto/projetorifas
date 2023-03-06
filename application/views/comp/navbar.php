@@ -7,7 +7,7 @@
             
                 <div class="xl:col-span-3">
                     <a href="<?=base_url()?>">
-                        <img src="<?=base_url()?>assets/img/logo.png" class="navbar-logo" alt="">
+                        <img src="<?=base_url()?>assets/img/<?= $this->admin_model->getConfiguracoes()['configuracoes_logo'] ?>" class="navbar-logo" alt="">
                     </a>
                 </div>
             
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-span-3">
                             <a href="<?=base_url()?>">
-                                <img src="<?=base_url()?>assets/img/logo.png" class="navbar-logo" style="object-fit:cover" alt="">
+                                <img src="<?=base_url()?>assets/img/<?= $this->admin_model->getConfiguracoes()['configuracoes_logo'] ?>" class="navbar-logo" style="object-fit:cover" alt="">
                             </a>
                     </div>
                     <div class="col-span-1" style="cursor:pointer" onclick="toggleNav()" >

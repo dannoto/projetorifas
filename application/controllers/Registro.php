@@ -10,7 +10,7 @@ class Registro extends CI_Controller {
 		$this->load->model('login_model');
 		$this->load->model('user_model');
 		$this->load->model('email_model');
-
+		$this->load->model('admin_model');
 
 	}
 	public function index()
@@ -65,6 +65,13 @@ class Registro extends CI_Controller {
 								if ($auth) {
 									
 									$this->session->set_userdata('session_user', $auth);
+
+									// Enviando E-mail
+									$this->email_model->welcomeUser($auth);
+
+									// Adicionando usuario na lista do active campaign
+									$list_id = $this->admin_model->getGateways()['gateway_act_list'];
+									$this->email_model->addUserToList($list_id, $user_name, $user_surname, $user_email);
 
 									$response =  array('status' => 'true', 'message' => 'Cadastrado com sucesso!');
 

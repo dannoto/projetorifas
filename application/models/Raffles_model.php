@@ -1,4 +1,3 @@
-
 <?php
 class raffles_model extends CI_Model
 {
@@ -18,6 +17,16 @@ class raffles_model extends CI_Model
 
 
 	}
+
+    public function getWinners($date) {
+        $this->db->like('winner_date', $date);
+        return $this->db->get('raffles_winners')->result();
+    }
+    
+    public function getAllUserWithTickets($raffles_id) {
+        $this->db->order_by('raffles_id', $raffles_id);
+        return $this->db->get('raffles_buyed')->result();
+    }
 
     public function getRaffles() {
         $this->db->order_by('id','desc');
@@ -49,7 +58,7 @@ class raffles_model extends CI_Model
 
     }
 
-    public function addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user) {
+    public function addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured) {
 
         $data = array(
             'raffles_title' => $raffles_title, 
@@ -63,14 +72,15 @@ class raffles_model extends CI_Model
             'raffles_category' => $raffles_category, 
             'raffles_date' => $raffles_date, 
             'raffles_time' => $raffles_time, 
-            'raffles_user' => $raffles_user
+            'raffles_user' => $raffles_user,
+            'raffles_featured' => $raffles_featured
         );
 
         return $this->db->insert('raffles', $data);
 
     }
 
-    public function updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user) {
+    public function updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured) {
 
         $this->db->where('id', $raffles_id);
 
@@ -85,6 +95,7 @@ class raffles_model extends CI_Model
                 'raffles_tickets_value' => $raffles_tickets_value, 
                 'raffles_status_publish' => $raffles_status_publish, 
                 'raffles_category' => $raffles_category, 
+                'raffles_featured' =>  $raffles_featured
                 
             );
 
@@ -98,6 +109,8 @@ class raffles_model extends CI_Model
                 'raffles_tickets_value' => $raffles_tickets_value, 
                 'raffles_status_publish' => $raffles_status_publish, 
                 'raffles_category' => $raffles_category, 
+                'raffles_featured' =>  $raffles_featured
+
                 
             );
         }

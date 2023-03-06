@@ -16,7 +16,8 @@ class Cron extends CI_Controller {
         $this->load->model('raffles_model');
         $this->load->model('payments_model');
         $this->load->model('cart_model');
-
+        
+        $this->load->model('raffles_model');
 
 	}
 
@@ -41,22 +42,43 @@ class Cron extends CI_Controller {
         $count_tickets = count($tickets);
 
         if ($count_tickets > 0) {
+
                 //index sorteado dentro do array
                 $index_sorteado = rand(0, $count_tickets - 1 );
 
                 // Ticket sorteado.
                 $ticket_sorteado = $tickets[$index_sorteado][0];
 
+                // Usuario sorteado
                 $usuario_sorteado = $this->payments_model->getUserByWinTicket($raffle_id, $ticket_sorteado);
 
                 //Update status Sorteio
                 $this->raffles_model->updateRaffleStatusComplete($raffle_id);
 
-                //add Wiiner
+                //Usuario data
+                $user_data = $this->user_model->getUserById($usuario_sorteado);
+
+                //Dados do Sorteio
+                $raffles_data = $this->raffles_model->getRaffle($raffle_id);
+
+                //Avisando que o sorteio começou
+                foreach($this->raffles_model->getAllUserWithTickets($raffle_id) as $c) {
+
+                    $user_data = $this->user_model->getUserById($c->raffles_user);
+
+                    // Enviando E-mail para todos participantes
+                    $this->email_model->startRaffle($user_data, $raffles_data);
+
+                }
+
+                //add Winner
                 if ( $this->raffles_model->addWinner($raffle_id, $usuario_sorteado, $ticket_sorteado)) {
 
-                    $response =  array('status' => 'true', 'message' => 'Sorteio concluído com sucesso.');
+                
+                    //Enviando e-mail para o vencedor
+                    $this->email_model->winnerRaffle($user_data, $raffles_data);
 
+                    $response =  array('status' => 'true', 'message' => 'Sorteio concluído com sucesso.');
                     
 
                 } else {

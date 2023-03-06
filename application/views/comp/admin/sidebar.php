@@ -43,6 +43,39 @@
             </div>
           </a>
         </div>
+
+        <div class="col-span-1" >
+          <a id="menu-logout"  href="<?=base_url() ?>painel/pagamentos">
+            <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="far fa-credit-card fa-lg" style='font-weight: 300;'></i></span>
+              <p>Pagamentos</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-span-1" >
+          <a id="menu-logout"  href="<?=base_url() ?>painel/configuracoes">
+            <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="far fa-cog fa-lg" style='font-weight: 300;'></i></span>
+              <p>Configurações</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-span-1" >
+          <a id="menu-logout"  href="<?=base_url() ?>painel/faq">
+            <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="far fa-question-circle fa-lg" style='font-weight: 300;'></i></span>
+              <p>FAQ</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-span-1" >
+          <a id="menu-logout"  href="<?=base_url() ?>painel/depoimentos">
+            <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="far fa-comments fa-lg" style='font-weight: 300;'></i></span>
+              <p>Depoimentos</p>
+            </div>
+          </a>
+        </div>
+
         <div class="col-span-1" >
           <a id="menu-winner"  href="<?=base_url() ?>painel/termos">
             <div style="height:90px" class="grid place-items-center  m-1 sidebar-menu-link bg-darkLight text-white"><span><i class="fal fa-file fa-lg"></i></span>

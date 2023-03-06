@@ -41,25 +41,29 @@
                 <form id="update-form">
 
                         <h1 class="text-white text-xl font-semibold">MERCADO PAGO</h1>
+                        <br>
                         <p class="text-white">PUBLIC KEY</p>
                         <input type="text" class="form-control input" name="gateway_me_public" required value="<?=$this->admin_model->getGateways()['gateway_me_public']?>"><br><br>
                         <p class="text-white">SECRET KEY</p>
                         <input type="text" class="form-control input" name="gateway_me_secret" required value="<?=$this->admin_model->getGateways()['gateway_me_secret']?>"><br><br>
                         <br>
-
+<!-- 
                         <h1 class="text-white text-xl font-semibold">PAYPAL</h1>
                         <p class="text-white">PUBLIC KEY</p>
                         <input type="text" class="form-control input" name="gateway_pay_public" required value="<?=$this->admin_model->getGateways()['gateway_pay_public']?>"><br><br>
                         <p class="text-white">SECRET KEY</p>
-                        <input type="text" class="form-control input" name="gateway_pay_secret" required value="<?=$this->admin_model->getGateways()['gateway_pay_secret']?>"><br><br>
+                        <input type="text" class="form-control input" name="gateway_pay_secret" required value="<?=$this->admin_model->getGateways()['gateway_pay_secret']?>"><br><br> -->
 
                     <br>
                         
-                        <h1 class="text-white text-xl font-semibold">ACTIVE CAMPAGIN</h1>
-                        <p class="text-white">PUBLIC KEY</p>
+                        <h1 class="text-white text-xl font-semibold">ACTIVE CAMPAIGN</h1>
+                        <br>
+                        <p class="text-white">URL </p>
                         <input type="text" class="form-control input" name="gateway_act_public" required value="<?=$this->admin_model->getGateways()['gateway_act_public']?>"><br><br>
-                        <p class="text-white">SECRET KEY</p>
+                        <p class="text-white">TOKEN</p>
                         <input type="text" class="form-control input" name="gateway_act_secret" required value="<?=$this->admin_model->getGateways()['gateway_act_secret']?>"><br><br>
+                        <p class="text-white">ID DA LISTA PRINCIPAL</p>
+                        <input type="text" class="form-control input" name="gateway_act_list" required value="<?=$this->admin_model->getGateways()['gateway_act_list']?>"><br><br>
                 
                         <br><br>
                         <button type="submit" class="px-3 py-2 w-full bg-green-500 text-white font-semibold">ATUALIZAR</button>

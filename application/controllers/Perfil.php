@@ -14,6 +14,8 @@ class Perfil extends CI_Controller {
 		$this->load->model('payments_model');
 		$this->load->model('cart_model');
 
+		$this->user_model->Auth();
+
 	}
 	public function index()
 	{

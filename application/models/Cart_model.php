@@ -69,6 +69,24 @@ class cart_model extends CI_Model
 
     }
 
+    public function deleteCartTicket($cart_ticket, $cart_user, $cart_raffle) {
+
+        $this->db->where('id', $cart_ticket); 
+        $this->db->where('cart_user', $cart_user);    
+        $this->db->where('cart_raffle', $cart_raffle);    
+
+        return $this->db->delete('cart_tickets');
+    }
+
+    //Quando deleta um carrinho e todo os ticket associados.
+    public function deleteCartTicketAll($cart_user, $cart_raffle) {
+
+        $this->db->where('cart_user', $cart_user);    
+        $this->db->where('cart_raffle', $cart_raffle);    
+
+        return $this->db->delete('cart_tickets');
+
+    }
 
     public function deleteCart($cart_id, $cart_user, $cart_raffle) {
         if ($cart_id !== null) {
@@ -76,6 +94,7 @@ class cart_model extends CI_Model
         }
         $this->db->where('cart_user', $cart_user);    
         $this->db->where('cart_raffle', $cart_raffle);    
+        
 
         return $this->db->delete('cart');
     }
@@ -115,6 +134,12 @@ class cart_model extends CI_Model
         return $this->db->get('cart_tickets')->result();
     }
 
+    public function getOrderTickets($raffles_order) {
+
+        $this->db->where('raffles_order', $raffles_order);
+        return $this->db->get('order_raffles_tickets')->result();
+    }
+
     public function getCartTicket($cart_ticket,$cart_raffle) {
         
         $this->db->where('cart_ticket', $cart_ticket);
@@ -123,25 +148,7 @@ class cart_model extends CI_Model
 
     }
 
-    public function deleteCartTicket($cart_ticket, $cart_user, $cart_raffle) {
-
-        $this->db->where('id', $cart_ticket); 
-        $this->db->where('cart_user', $cart_user);    
-        $this->db->where('cart_raffle', $cart_raffle);    
-
-        return $this->db->delete('cart_tickets');
-    }
-
-    //Quando deleta um carrinho e todo os ticket associados.
-    public function deleteCartTicketAll($cart_user, $cart_raffle) {
-
-        $this->db->where('cart_user', $cart_user);    
-        $this->db->where('cart_raffle', $cart_raffle);    
-
-        return $this->db->delete('cart_tickets');
-
-    }
-
+  
 
 
 
