@@ -89,7 +89,39 @@ class admin_model extends CI_Model
 
         return $this->db->insert('faq', $data );
     }
+    
 
+
+    public function getCupons() {
+        $this->db->order_by('id','desc');
+        return $this->db->get('cart_discount')->result();
+
+    }
+
+    public function deleteCupons($cupom_id) {
+        $this->db->where('id', $cupom_id);
+        return $this->db->delete('cart_discount');
+
+    }
+
+    public function addCupons($cart_discount_code, $cart_discount_porcentage, $cart_discount_limit) {
+        $data = array(
+'cart_discount_code' => $cart_discount_code, 
+'cart_discount_porcentage' =>$cart_discount_porcentage, 
+'cart_discount_limit' => $cart_discount_limit, 
+'cart_discount_status' => 1
+        );
+
+        return $this->db->insert('cart_discount', $data);
+    }
+
+
+
+    public function getSorteios() {
+
+        return $this->db->get('raffles')->result();
+
+    }
 
     public function getPagamentos() {
         return $this->db->get('payments')->result();

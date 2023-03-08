@@ -50,11 +50,11 @@ $mounth = array(
             </form>
         </div> -->
 
-        <?php if (count($this->raffles_model->getWinners(date('Y-m'))) > 0) { ?>
+        <?php if (count($this->raffles_model->getWinners(date('m-Y'))) > 0) { ?>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 vencedores-field">
 
-                <?php foreach ($this->raffles_model->getWinners(date('Y-m')) as $w) { ?>
+                <?php foreach ($this->raffles_model->getWinners(date('m-Y')) as $w) { ?>
 
                     <?php $raffle = $this->raffles_model->getRaffle($w->winner_raffle); ?>
                     <?php $winner = $this->user_model->getUserById($w->winner_user); ?>
@@ -63,10 +63,10 @@ $mounth = array(
                         <div class="col-span-1 m-2 mt-5">
                             <div class="grid xl:grid-cols-3 grid-cols-2 col-span-3  border-b border-orange ">
                                 <div class="xl:col-span-1">
-                                    <img src="<?= base_url() ?>assets/img/capa.png" alt="">
+                                    <img src="<?= base_url() ?>assets/img/raffles/<?=$raffle['raffles_image']?>" alt="">
                                 </div>
                                 <div class="xl:col-span-2 xl:ml-2">
-                                    <h1 class="text-orange font-semibold text-base line-clamp-1"><? $raffle['raffles_title'] ?></h1>
+                                    <h1 class="text-orange font-semibold text-base line-clamp-1"><?=$raffle['raffles_title'] ?></h1>
                                     <p class="text-white line-clamp-1 mt-5 "><i class="fal fa-trophy ml-3 "></i> <?= $winner['user_name'] ?></p>
                                     <p class="text-white"><i class="fal fa-calendar text-white ml-3 mr-3 "> </i><?= $w->winner_date ?></p>
                                 </div>

@@ -1,4 +1,4 @@
-<?php if ($this->session->userdata('session_user')) { ?>
+<?php if ($this->session->userdata('session_admin')) { ?>
 <div class="navbar">
         <!-- Desktop -->
         <div class="xl:block hidden">

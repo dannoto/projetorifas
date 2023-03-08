@@ -16,13 +16,14 @@ class Sair extends CI_Controller {
 	public function index()
 	{
 
-		if ($this->session->userdata('session_admin')['user_admin'] == 1) {
+		// if ($this->session->userdata('session_admin')['user_admin'] == 1) {
 			$this->session->unset_userdata('session_admin');
-			redirect(base_url('painel/login'));
-		} else {
+		// 	redirect(base_url('painel/login'));
+		// } else {
 			$this->session->unset_userdata('session_user');
+			
 			redirect(base_url('login'));
-		}
+		// }
   
     }
 }

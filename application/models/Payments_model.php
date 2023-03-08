@@ -114,6 +114,8 @@ class payments_model extends CI_Model
     {
 
         $this->db->where('payments_user', $user_id);
+        $this->db->order_by('id','desc');
+
 
         return $this->db->get('payments')->result();
     }
@@ -147,7 +149,6 @@ class payments_model extends CI_Model
 
     public function getPaymentById($payment_id)
     {
-
 
         $this->db->where('payment_id', $payment_id);
         return $this->db->get('payments')->result();
@@ -350,13 +351,15 @@ class payments_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    public function updatePayment($payment_id, $payment_status)
+    public function updatePayment($payment_id, $payment_gateway_id, $payments_type,  $payment_status)
     {
 
-        $this->db->where('payment_id', $payment_id);
+        $this->db->where('id', $payment_id);
 
         $data = array(
-            'payments_status' => $payment_status
+            'payments_status' => $payment_status,
+            'payments_id' => $payment_gateway_id,
+            'payments_type' =>  $payments_type
         );
 
         return  $this->db->update('payments', $data);
@@ -387,8 +390,7 @@ class payments_model extends CI_Model
         return $this->db->insert('raffles_buyed', $data);
     }
 
-
-    public function addOrderRafflesBuyed($raffles_id, $raffles_payment, $raffles_amount,  $raffles_user, $raffles_data, $raffles_time, $raffles_status)
+    public function addOrderRafflesBuyed($raffles_id, $raffles_payment, $raffles_amount,  $raffles_user)
     {
 
         $data = array(

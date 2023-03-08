@@ -55,6 +55,7 @@ class Cron extends CI_Controller {
                 //Update status Sorteio
                 $this->raffles_model->updateRaffleStatusComplete($raffle_id);
 
+                
                 //Usuario data
                 $user_data = $this->user_model->getUserById($usuario_sorteado);
 

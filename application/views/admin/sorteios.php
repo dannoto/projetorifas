@@ -41,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->raffles_model->getRaffles() as $r) { ?>
+                        <?php foreach ($sorteios as $r) { ?>
                             <tr>
                                 <td><img src="<?= base_url() ?>assets/img/raffles/<?= $r->raffles_image ?>" style="height: 50px;max-height: 50px;width:50px;max-width:50px; object-fit:cover" alt=""></td>
                                 <td><small><?= substr($r->raffles_title, 0, 50) ?>...</small></td>

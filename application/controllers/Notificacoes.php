@@ -62,7 +62,7 @@ class Notificacoes extends CI_Controller
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $headers = array(
-            "Authorization: Bearer TEST-7865351743079375-072522-41d3edf94d6850dd4f65fd4c58562442-542182298",
+            "Authorization: Bearer ".$this->admin_model->getGateways()['gateway_me_secret'],
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         //for debug only!
@@ -124,58 +124,73 @@ class Notificacoes extends CI_Controller
     {
 
         $json = json_decode(file_get_contents("php://input"));
+        
+
         $payments_id = $json->data->id;
+        
+        // $payments_id = "1313024571";
+        // echo $payments_id;
 
         $this->payments_model->addNotification($payments_id);
 
 
         $data = $this->checkPayment($payments_id);
+        
+        print_r($data);
 
-        // Pegando intenção de pagamento.
+        // // Pegando intenção de pagamento.
         $payment_data = $this->payments_model->getPaymentByOrder($data->external_reference);
+        echo "<br>pagamento data<br>";
+        print_r($payment_data);
 
-        //Pegando ordem
+        // //Pegando ordem
         $order_data = $this->payments_model->getOrder($payment_data['payments_order']);
+        echo "<br>ordem data<br>";
 
-        //Pegando usuario
+        print_r($order_data);
+
+        // //Pegando usuario
         $user_data = $this->user_model->getUserById($order_data['order_user']);
+        echo "<br>usuario data<br>";
+
+        print_r($user_data);
 
         // Atualizando pagamento
         // 1 sucesso / 2 pendente / 3 recusado / 4 estornado	
 
         if ($data->status == "approved") {
 
-            $this->payments_model->updatePayment($payment_data['id'], 1);
+            $this->payments_model->updatePayment($payment_data['id'],$data->id, $data->payment_type_id,  1);
 
             //Limpando Carrinho
-            $this->cart_model->resetCartByUser($cart_user);
+            $this->cart_model->resetCartByUser($user_data['id']);
 
             //Limpando carrinho ticket.
-            $this->cart_model->resetCartTicketsByUser($cart_user);
+            $this->cart_model->resetCartTicketsByUser($user_data['id']);
 
             // Enviando E-mail
             $this->email_model->paymentApproved($user_data, $order_data);
         } else if ($data->status == "rejected") {
 
-            $this->payments_model->updatePayment($payment_data['id'], 3);
+            $this->payments_model->updatePayment($payment_data['id'], $data->id, $data->payment_type_id,3);
 
             // Enviando E-mail
             $this->email_model->paymentRecused($user_data, $order_data);
         } else if ($data->status == "pending") {
 
-            $this->payments_model->updatePayment($payment_data['id'], 2);
+            $this->payments_model->updatePayment($payment_data['id'],$data->id, $data->payment_type_id, 2);
 
             // Enviando E-mail
             $this->email_model->paymentPending($user_data, $order_data);
         } else if ($data->status == "cancelled") {
 
-            $this->payments_model->updatePayment($payment_data['id'], 3);
+            $this->payments_model->updatePayment($payment_data['id'], $data->id, $data->payment_type_id , 3);
 
             // Enviando E-mail
             $this->email_model->paymentRecused($user_data, $order_data);
         } else if ($data->status == "in_process") {
 
-            $this->payments_model->updatePayment($payment_data['id'], 2);
+            $this->payments_model->updatePayment($payment_data['id'], $data->id, $data->payment_type_id, 2);
 
             // Enviando E-mail
             $this->email_model->paymentPending($user_data, $order_data);
@@ -183,43 +198,50 @@ class Notificacoes extends CI_Controller
 
 
         // Processando pagamento
-        if ($order_data['order_status'] = 1) {
+        if ($order_data['order_status'] == 1) {
             // Ordem já foi processada
             echo "Ordem já foi processada.";
             
-        } else if ($order_data['order_status'] = 0) {
+        } else if ($order_data['order_status'] == 0) {
             //  Ordem pendente
+            
+            // echo "processando";
+            if ($data->status == "approved") {
 
-            $order_raffles = $this->getOrderRaffles($order_data['id']);
+
+                $order_raffles = $this->payments_model->getOrderRaffles($order_data['id']);
+
+                print_r($order_raffles);
+
+                foreach ($order_raffles as $c) {
+
+                    // Ordem da Rifa
+                    $this->payments_model->addRafflesBuyed($c->raffles_id, $payment_data['id'], $order_data['order_amount'], $c->raffles_user , date('Y-m-d'), date('H:i:s'), 1);
+
+        
+                    // Ordem dos Tickets
+                    foreach ($this->cart_model->getOrderTickets($c->id) as $t) {
+
+                        $ticket_raffle = $t->raffles_id;
+                        $ticket_number = $t->raffles_ticket;
+                        $ticket_user = $t->raffles_user;
+                        $ticket_date = date('d-m-Y');
+                        $ticket_time =  date('H:i:s');
+                        $ticket_payment_id = $payment_data['id'];
+                        $ticket_payment_type = 1;
+
+                        $this->payments_model->addTicketBuyed($ticket_raffle, $ticket_number, $ticket_user, $ticket_date, $ticket_time, $ticket_payment_id, $ticket_payment_type);
+                    }
 
 
-            foreach ($order_raffles as $c) {
+                    //Atualiza porcentagem do sorteio
+                    $raffles_tickets = $this->raffles_model->getRaffle($c->raffles_id)['raffles_tickets'];
+                    $raffles_buyed = count($this->payments_model->checkBuyedTickets($c->raffles_id, null));
 
-                // Ordem da Rifa
-                $this->payments_model->addOrderRafflesBuyed($c->raffles_id, $payment_data['id'], $order_data['order_amount'], $c->raffles_user);
-
-                // Ordem dos Tickets
-                foreach ($this->cart_model->getOrderTickets($c->id) as $t) {
-
-                    $ticket_raffle = $t->raffles_id;
-                    $ticket_number = $t->raffles_ticket;
-                    $ticket_user = $t->raffles_user;
-                    $ticket_date = date('d-m-Y');
-                    $ticket_time =  date('H:i:s');
-                    $ticket_payment_id = $payment_data['id'];
-                    $ticket_payment_type = 1;
-
-                    $this->payments_model->addOrderTicketBuyed($ticket_raffle, $ticket_number, $ticket_user, $ticket_date, $ticket_time, $ticket_payment_id, $ticket_payment_type);
+                    $this->raffles_model->updateProgress($c->raffles_id, $raffles_tickets, $raffles_buyed);
                 }
 
-
-                //Atualiza porcentagem do sorteio
-                $raffles_tickets = $this->raffles_model->getRaffle($c->raffles_id)['raffles_tickets'];
-                $raffles_buyed = count($this->payments_model->checkBuyedTickets($c->raffles_id, null));
-
-                $this->raffles_model->updateProgress($c->raffles_id, $raffles_tickets, $raffles_buyed);
             }
-
             // Atualiza status da ordem 
             $this->payments_model->updateOrderStatus($order_data['id']);
         }

@@ -24,12 +24,17 @@ class raffles_model extends CI_Model
     }
     
     public function getAllUserWithTickets($raffles_id) {
-        $this->db->order_by('raffles_id', $raffles_id);
-        return $this->db->get('raffles_buyed')->result();
+        // $this->db->order_by('raffles_id', $raffles_id);
+        // return $this->db->get('raffles_buyed')->result();
+        $data = $this->db->query('SELECT DISTINCT raffles_user FROM raffles_buyed WHERE raffles_id='.$raffles_id);
+        return $data->result_array();
     }
 
     public function getRaffles() {
         $this->db->order_by('id','desc');
+        $this->db->where('raffles_status_random	', 1);
+        $this->db->where('raffles_status_publish','1');
+
         return $this->db->get('raffles')->result();
 
     }
@@ -131,6 +136,9 @@ class raffles_model extends CI_Model
         $this->db->where('raffles_category !=', $cat1);
         $this->db->where('raffles_category !=', $cat2);
         $this->db->where('raffles_category !=', $cat3);
+        $this->db->where('raffles_status_random	', 1);
+        $this->db->where('raffles_status_publish','1');
+
 
         return $this->db->get('raffles')->result();
 
@@ -139,12 +147,18 @@ class raffles_model extends CI_Model
         $this->db->where('raffles_category', $raffles_category);
         $this->db->order_by('id','desc');
         $this->db->where('raffles_status_random','1');
+        
+        $this->db->where('raffles_status_publish','1');
+
        
         return $this->db->get('raffles')->result();
     }
     
     public function getRafflesFeatured() {
         $this->db->where('raffles_featured', 1);
+        $this->db->where('raffles_status_random	', 1);
+        $this->db->where('raffles_status_publish','1');
+
         return $this->db->get('raffles')->result();
     }
 
@@ -153,6 +167,8 @@ class raffles_model extends CI_Model
         $this->db->where('raffles_category', $raffles_category);
         $this->db->order_by('id','rand');
         $this->db->where('raffles_status_random','1');
+        $this->db->where('raffles_status_publish','1');
+
         $this->db->limit(3);
         return $this->db->get('raffles')->result();
     }
@@ -161,6 +177,8 @@ class raffles_model extends CI_Model
     public function getRafflesRelatedRandom(){
         $this->db->order_by('id','rand');
         $this->db->where('raffles_status_random','1');
+        $this->db->where('raffles_status_publish','1');
+
         $this->db->limit(3);
         return $this->db->get('raffles')->result();
     }

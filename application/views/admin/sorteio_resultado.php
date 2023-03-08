@@ -49,6 +49,15 @@
                         <h2 class="text-white font-bold text-xl text-3x1 text-center">VENCEDOR</h2>
                     <h1  class="text-white font-bold text-xl text-3x1 text-green-500 text-center"><?=$winner_user['user_name']?> <?=$winner_user['user_surname']?></h1>
                     <br>
+                    <h2 class="text-white font-bold text-xl text-3x1 text-center">E-MAIL DE CONTATO</h2>
+                    <h1  class="text-white font-bold text-xl text-3x1 text-green-500 text-center"> <?=$winner_user['user_email']?></h1>
+                    <br>
+                    <h2 class="text-white font-bold text-xl text-3x1 text-center">TELEFONE</h2>
+                    <h1  class="text-white font-bold text-xl text-3x1 text-green-500 text-center"><?=$winner_user['user_ddd']?> <?=$winner_user['user_phone']?></h1>
+                    <br>
+                    <h2 class="text-white font-bold text-xl text-3x1 text-center">CPF</h2>
+                    <h1  class="text-white font-bold text-xl text-3x1 text-green-500 text-center"> <?=$winner_user['user_cpf']?></h1>
+                    <br>
                         <h2 class="text-white font-bold text-xl text-3x1 text-center">TICKET SORTEADO</h2>
                         <h1  class="text-white font-bold text-xl text-3x1 text-center text-green-500 mt-3" style="font-size: 50px;"><?=$winner['winner_ticket']?></h1>
 

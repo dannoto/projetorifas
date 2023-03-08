@@ -43,8 +43,11 @@ class Teste extends CI_Controller
             echo "n foi";
         }
     }
-    function addList($ac)
+   function addList()
     {
+
+        // $ac = new ActiveCampaign("https://natanecommerce.api-us1.com", "0a3a1c0dd5d2d870006368934c42c80f42cb06885cbdd56b2db12d912665efe791c100aa");
+        $ac = new ActiveCampaign("https://natanecommerce.api-us1.com", "0a3a1c0dd5d2d870006368934c42c80f42cb06885cbdd56b2db12d912665efe791c100aa");
 
         $list = array(
             "name"           => "Betraffle Usuários",
@@ -57,16 +60,16 @@ class Teste extends CI_Controller
 
         $list_add = $ac->api("list/add", $list);
 
-        if (!(int)$list_add->success) {
-            // request failed
-            // echo "<p>Adding list failed. Error returned: " . $list_add->error . "</p>";
-            // exit();
-            return false;
-        } else {
+        // if (!(int)$list_add->success) {
+          
+        //     return false;
+        // } else {
 
-            return (int)$list_add->id;
-        }
+        //     return (int)$list_add->id;
+        // }
+        print_r($list_add);
     }
+
 
     function addUserToList($ac, $list_id, $user_name, $user_surname, $user_email)
     {
@@ -122,7 +125,7 @@ class Teste extends CI_Controller
 
         // require_once("includes/ActiveCampaign.class.php");
 
-        $ac = new ActiveCampaign("ccoanalitica.api-us1.com", "1b5a7e8977733ac82f16f86eebd298af6778e1003db0342d686c1f5439eaa2cd77ba4414");
+        $ac = new ActiveCampaign("https://natanecommerce.api-us1.com", "0a3a1c0dd5d2d870006368934c42c80f42cb06885cbdd56b2db12d912665efe791c100aa");
 
         /*
          * TEST API CREDENTIALS.
@@ -145,6 +148,26 @@ class Teste extends CI_Controller
         print_r($account);
         echo "</pre>";
 
+        $list = array(
+            "name"           => "Betraffle",
+            "sender_name"    => "Betraffles",
+            "sender_addr1"   => "Street",
+            "sender_city"    => "Rio de Janeiro",
+            "sender_zip"     => "1141212",
+            "sender_country" => "BRL",
+        );
+
+        $list_add = $ac->api("list/add", $list);
+
+        if (!(int)$list_add->success) {
+          
+echo "false";
+        } else {
+
+            return (int)$list_add->id;
+        }
+        // print_r($list_add);
+
 
         // Add List
         // $add_lista = $this->addList($ac);
@@ -165,7 +188,7 @@ class Teste extends CI_Controller
         // }
 
         // Send Email
-        $send_email = $this->sendEmail($ac);
+        // $send_email = $this->sendEmail($ac);
 
         // if ($send_email) {
         // } else {
