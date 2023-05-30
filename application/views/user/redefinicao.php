@@ -11,7 +11,7 @@
     <?php $this->load->view('comp/sidebar');?>
 
     
-    <section>
+    <section  class="xl:mt-32 mt-32">
         <div class="grid place-items-center xl:mr-36 xl:ml-36 recuperacao xl:m-0 m-8">
             
             <form action="" id="form-recovery" class="mb-28 recuperacao-form">

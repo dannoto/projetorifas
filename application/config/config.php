@@ -29,7 +29,7 @@ if (ENVIRONMENT == "production") {
 
 } else if (ENVIRONMENT == "development") {
 
-    $config['base_url'] = 'http://localhost/rifas';
+    $config['base_url'] = 'http://localhost/betraffle';
 }
 
 /*

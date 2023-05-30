@@ -12,7 +12,7 @@
     <!-- Navbar -->
     <?php $this->load->view('comp/sidebar'); ?>
 
-    <section>
+    <section  class="xl:mt-32 mt-32">
 
         <h1 style="font-size:30px ;" class="text-xl mt-12 text-5x1 font-semibold text-white xl:ml-64 ml-12">Perguntas Frequentes</h1>
 

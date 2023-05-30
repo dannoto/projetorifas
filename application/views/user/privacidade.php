@@ -12,16 +12,16 @@
 
 
 
-    <section>
+    <section  class="xl:mt-32 mt-32">
         <br><br>
         <div class="faq-container">
-            <h1 style="font-size:25px ;" class="text-xl text-5x1 font-semibold text-white xl:ml-64 ml-12"><?=$this->admin_model->getPrivacy()['privacy_title']?></h1>
+            <h1 style="font-size:25px ;" class="text-xl text-5x1 text-center font-semibold text-white "><?=$this->admin_model->getPrivacy()['privacy_title']?></h1>
         </div>
         <section class="faq-container">
 
             <div class="xl:ml-44 xl:mr-44  mt-12 ml-5 mr-5">
 
-                <p class="text-white " style="line-break:all;"><?=$this->admin_model->getPrivacy()['privacy_content']?></p>
+                <p class="text-white " style="white-space:pre-wrap"><?=$this->admin_model->getPrivacy()['privacy_content']?></p>
             </div>
         </section>
     </section>

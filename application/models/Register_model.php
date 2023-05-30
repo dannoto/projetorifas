@@ -2,7 +2,7 @@
 class register_model extends CI_Model
 {
 
-    public function addUser($user_name, $user_surname, $user_email, $user_cpf, $user_ddd, $user_phone, $user_password, $user_ref, $user_ip)
+    public function addUser($user_name, $user_surname, $user_email, $user_cpf, $user_ddd, $user_phone, $user_password, $user_ref, $user_ip, $user_affiliate)
     {
 
         $data = array(
@@ -20,6 +20,7 @@ class register_model extends CI_Model
             'user_time' => date('H:i:s'),
             'user_level' => 1,
             'user_token' => mt_rand(),
+            'user_affiliate' => $user_affiliate
         );
 
 
@@ -180,5 +181,136 @@ class register_model extends CI_Model
         }
 
         return $ip;
+    }
+
+    // Afiliate Link
+
+    public function add_affiliate_link($ref, $user_ip)
+    {
+
+        $data  = array(
+            'affiliate_ref' => $ref,
+            'user_ip' => $user_ip,
+            'affiliate_data' => date('Y-m-d H:i:s')
+        );
+
+        return $this->db->insert('affiliate_click', $data);
+    }
+
+
+    // Painel de Afiliação
+
+    public function get_cadastros_ref($user_ref)
+    {
+
+        $this->db->where('user_ref', $user_ref);
+        return $this->db->get('users')->result();
+    }
+
+    public function get_cliques_unicos($user_ref)
+    {
+        $this->db->distinct();
+        $this->db->select('user_ip');
+        $this->db->from('affiliate_click');
+        $this->db->where('affiliate_ref', $user_ref);
+        // $this->db->group_by('affiliate_ref');
+        // $this->db->having('COUNT(DISTINCT user_ip) = 1');
+        
+        return $this->db->get()->result();
+    }
+
+    public function get_cliques_totais($user_ref)
+    {
+        $this->db->where('affiliate_ref', $user_ref);
+        return $this->db->get('affiliate_click')->result();
+    }
+
+    public function getAffiliateComissionPending($user_id) {
+        $this->db->where('comission_receiver', $user_id);
+        $this->db->where('comission_status', 0);
+        return $this->db->get('affiliate_comission')->result();
+    }
+
+    public function getAffiliateComissionFinished($user_id) {
+        $this->db->where('comission_user', $user_id);
+        return $this->db->get('affiliate_comission_history')->result();
+    }
+
+    // Rendmentos Totai
+    public function getAffiliateComissionTotal($user_id) {
+        $this->db->where('comission_receiver', $user_id);
+        
+        $data =  $this->db->get('affiliate_comission')->result();
+
+        $total = 0 ;
+
+        foreach ($data as $c) {
+            $total = $total + $c->comission;
+        } 
+
+        return round($total, 2);
+    }
+
+    public function getAffiliateComissionTotalPending($user_id) {
+        $this->db->where('comission_receiver', $user_id);
+        $this->db->where('comission_status', 0);
+
+        $data =  $this->db->get('affiliate_comission')->result();
+
+        $total = 0 ;
+
+        foreach ($data as $c) {
+            $total = $total + $c->comission;
+        } 
+
+        return round($total, 2);
+    }
+    // Painel de Afiliação
+
+    // Add Comussion
+
+    public function getComissionSettings() {
+        return $this->db->get('affiliate_setting')->row_array();
+    }
+    
+    function getComissionCalc($comission_amount) {
+
+        $response = array();
+
+        $comission_settings  = $this->db->get('affiliate_setting')->row_array();
+
+        $comission_amount = ($comission_amount * ($comission_settings['comission_porcentage'] / 100));
+
+        $response = array('amount' => $comission_amount, 'porcentage' => $comission_settings['c_porcentage'], 'active' => $comission_settings['c_active']);
+
+        return $response;
+        
+
+    }
+
+    public function addComission($comission_payment_id, $comission_receiver, $comission_payer, $comission_amount ) {
+
+
+        $comission = $this->getComissionCalc($comission_amount);
+
+        $data = array(
+            'comission_payment_id' => $comission_payment_id,
+            'comission_amount' => $comission_amount,
+            'comission_porcentage' => $comission['porcentage'],
+            'comission_date' => date('Y-m-d H:i:s'),
+            'comission_status' => 0,
+            'comission_payer' => $comission_payer,
+            'comission_receiver' => $comission_receiver,
+            'comission' => $comission['amount']
+
+        );
+
+        if ($comission['active'] == 1) {
+            return $this->db->insert('affiliate_comission', $data);
+        } else {
+            return true;
+        }
+
+
     }
 }

@@ -8,8 +8,8 @@
 require './vendor/autoload.php';
 
 
-// require("/home1/raffle29/betraffle.com.br/PHPMailer-master/src/PHPMailer.php");
-// require("/home1/raffle29/betraffle.com.br/PHPMailer-master/src/SMTP.php");
+require("./PHPMailer-master/src/PHPMailer.php");
+require("./PHPMailer-master/src/SMTP.php");
 
 class email_model extends CI_Model
 {
@@ -29,36 +29,42 @@ class email_model extends CI_Model
     public  function addUserToList($list_id, $user_name, $user_surname, $user_email)
     {
 
-        $active_url = $this->admin_model->getGateways()['gateway_act_public'];
-        $active_token = $this->admin_model->getGateways()['gateway_act_secret'];
-
-        $ac = new ActiveCampaign($active_url, $active_token);
+        try {
 
 
-        $contact = array(
-            "email"              => $user_email,
-            "first_name"         => $user_name,
-            "last_name"          => $user_surname,
-            "p[{$list_id}]"      => $list_id,
-            "status[{$list_id}]" => 1, // "Active" status
-        );
+            $active_url = $this->admin_model->getGateways()['gateway_act_public'];
+            $active_token = $this->admin_model->getGateways()['gateway_act_secret'];
 
-        $contact_sync = $ac->api("contact/sync", $contact);
+            $ac = new ActiveCampaign($active_url, $active_token);
 
-        if (!(int)$contact_sync->success) {
-            // request failed
-            // echo "<p>Syncing contact failed. Error returned: " . $contact_sync->error . "</p>";
-            // exit();
+
+            $contact = array(
+                "email"              => $user_email,
+                "first_name"         => $user_name,
+                "last_name"          => $user_surname,
+                "p[{$list_id}]"      => $list_id,
+                "status[{$list_id}]" => 1, // "Active" status
+            );
+
+            $contact_sync = $ac->api("contact/sync", $contact);
+
+            if (!(int)$contact_sync->success) {
+                // request failed
+                // echo "<p>Syncing contact failed. Error returned: " . $contact_sync->error . "</p>";
+                // exit();
+                return false;
+            } else {
+
+                // return (int)$contact_sync->subscriber_id;
+                return true;
+            }
+
+            // successful request
+            // $contact_id = (int)$contact_sync->subscriber_id;
+            // echo "<p>Contact synced successfully (ID {$contact_id})!</p>";
+        } catch (Exception $e) {
             return false;
-        } else {
-
-            // return (int)$contact_sync->subscriber_id;
-            return true;
         }
-
-        // successful request
-        // $contact_id = (int)$contact_sync->subscriber_id;
-        // echo "<p>Contact synced successfully (ID {$contact_id})!</p>";
     }
 
 

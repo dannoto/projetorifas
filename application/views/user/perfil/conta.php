@@ -12,7 +12,7 @@
 
    
 
-    <section>
+    <section  class="xl:mt-32 mt-24">
         <br><br>
         <div class="faq-container">
             <h1 style="font-size:25px ;" class="text-xl text-5x1 font-semibold text-white xl:ml-64 ml-12">Minhas Informações</h1>

@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <?php $this->load->view('comp/sidebar');?>
 
-    <section>
+    <section  class="xl:mt-32 mt-24">
 
         <div class=" xl:ml-36 xl:mr-36 xl: mt-12 m-3 perfil-sorteios-breadcumb">
             <h1 class="text-white font-bold text-xl text-3x1">Meus Sorteios</h1>

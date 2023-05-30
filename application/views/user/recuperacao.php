@@ -11,13 +11,13 @@
     <?php $this->load->view('comp/sidebar');?>
 
     
-    <section>
+    <section  class="xl:mt-32 mt-32">
         <div class="grid place-items-center xl:mr-36 xl:ml-36 recuperacao xl:m-0 m-8">
             
             <form action="" id="form-recovery" class="mb-28 recuperacao-form">
                 <div>
                     <h1 class="text-white font-bold">Recuperação</h1>
-                    <p class="text-white text-xl mt-5 mb-8 ">Insira seu e-mail para recuperar.</span></a></p>
+                    <p class="text-white text-xl mt-2 mb-1 ">Insira seu e-mail para recuperar.</span></a></p>
                 </div>
                 
                 <input type="email" name="user_email" required class="p-2" placeholder="E-mail">

@@ -39,16 +39,11 @@ $mounth = array(
     <!-- Navbar -->
     <?php $this->load->view('comp/sidebar'); ?>
 
-    <section class="grid place-items-center vencedores">
+    <section class="grid  xl:mt-32 mt-32 xl:ml-44 xl:mr-44 ml-3 mr-3 place-items-center vencedores">
         <div>
             <h1 class="text-white font-semibold"> Vencedores de <?= $mounth[date('m')] ?> / <?= date('Y') ?></h1>
 
         </div>
-        <!-- <div class="vencedores-busca mt-5 mb-5">
-            <form action="">
-                <input type="text" class="p-2 bg-darkLight text-white" placeholder="Busque o vencedor pelo nome">
-            </form>
-        </div> -->
 
         <?php if (count($this->raffles_model->getWinners(date('m-Y'))) > 0) { ?>
 

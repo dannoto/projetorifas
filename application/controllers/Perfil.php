@@ -31,6 +31,10 @@ class Perfil extends CI_Controller {
 	{
 		$this->load->view('user/perfil/conta');
 	}
+	public function afiliado()
+	{
+		$this->load->view('user/perfil/afiliado');
+	}
 
 	public function creditos()
 	{

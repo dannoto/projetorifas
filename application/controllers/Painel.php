@@ -69,7 +69,6 @@ class Painel extends CI_Controller
         }
 
         print_r(json_encode($response));
-        
     }
 
     public function cupons()
@@ -81,6 +80,17 @@ class Painel extends CI_Controller
         );
 
         $this->load->view('admin/cupons', $data);
+    }
+    public function afiliacao()
+    {
+
+
+        $data = array(
+            'cupons' => $this->admin_model->getCupons(),
+            'affiliate_settings' => $this->register_model->getComissionSettings(),
+        );
+
+        $this->load->view('admin/afiliacao', $data);
     }
 
     public function termos()
@@ -323,6 +333,18 @@ class Painel extends CI_Controller
             }
         }
 
+        if ($_FILES) {
+
+            $uploadPATH = './assets/img/raffles/';
+            $uploadNAME = mt_rand() . basename($_FILES['raffles_image_featured']['name']);
+            $uploadPATHFULL = $uploadPATH . $uploadNAME;
+
+            if (move_uploaded_file($_FILES['raffles_image_featured']['tmp_name'], $uploadPATHFULL)) {
+                $raffles_image_featured = $uploadNAME;
+            } else {
+                $raffles_image_featured = "";
+            }
+        }
         if ($this->input->post()) {
 
             $response = array();
@@ -332,18 +354,43 @@ class Painel extends CI_Controller
             $raffles_title = htmlspecialchars($this->input->post('raffles_title'));
             $raffles_description = htmlspecialchars($this->input->post('raffles_description'));
             $raffles_image = $raffles_image;
-            $raffles_tickets = htmlspecialchars($this->input->post('raffles_tickets'));
-            $raffles_tickets_limit = htmlspecialchars($this->input->post('raffles_tickets_limit'));
-            $raffles_tickets_value = str_replace(",", "", htmlspecialchars($this->input->post('raffles_tickets_value')));
-            $raffles_status_publish = htmlspecialchars($this->input->post('raffles_status_publish'));
-            $raffles_status_random = 1;
+    
+       
             $raffles_category = htmlspecialchars($this->input->post('raffles_category'));
             $raffles_date = date('d/m/Y');
             $raffles_time = date('H:i:s');
+            $raffles_status_random = 1;
+
+
+            // Quantitativo
+            $raffles_tickets = htmlspecialchars($this->input->post('raffles_tickets'));
+            $raffles_tickets_limit = htmlspecialchars($this->input->post('raffles_tickets_limit'));
+
+            // Precificação
+            $raffles_tickets_value = str_replace(",", "", htmlspecialchars($this->input->post('raffles_tickets_value')));
+            $raffles_isfree = str_replace(",", "", htmlspecialchars($this->input->post('raffles_isfree')));
+
+            // Cashback
+            $raffles_cashback = htmlspecialchars($this->input->post('raffles_cashback'));
+            $raffles_cashback_amount = htmlspecialchars($this->input->post('raffles_cashback_amount'));
+
+            // Status
+            $raffles_status_publish = htmlspecialchars($this->input->post('raffles_status_publish'));
             $raffles_featured = htmlspecialchars($this->input->post('raffles_featured'));
 
 
-            if ($this->raffles_model->addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured)) {
+            if ($this->raffles_model->addRaffle(
+                $raffles_title, $raffles_description,
+                 $raffles_image, $raffles_tickets, 
+                 $raffles_tickets_limit, $raffles_tickets_value, 
+                 $raffles_status_publish, $raffles_status_random,
+                  $raffles_category, $raffles_date, $raffles_time, 
+                  $raffles_user, $raffles_featured,
+                  $raffles_isfree,
+                  $raffles_cashback,
+                  $raffles_cashback_amount,
+                  $raffles_image_featured
+                  )) {
                 $response =  array('status' => 'true', 'message' => 'Sorteio criado com sucesso!');
             } else {
                 $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
@@ -369,6 +416,19 @@ class Painel extends CI_Controller
             }
         }
 
+        if ($_FILES) {
+
+            $uploadPATH = './assets/img/raffles/';
+            $uploadNAME = mt_rand() . basename($_FILES['raffles_image_featured']['name']);
+            $uploadPATHFULL = $uploadPATH . $uploadNAME;
+
+            if (move_uploaded_file($_FILES['raffles_image_featured']['tmp_name'], $uploadPATHFULL)) {
+                $raffles_image_featured = $uploadNAME;
+            } else {
+                $raffles_image_featured = "";
+            }
+        }
+
         if ($this->input->post()) {
 
             $response = array();
@@ -389,8 +449,15 @@ class Painel extends CI_Controller
             $raffles_time = date('H:i:s');
             $raffles_featured = htmlspecialchars($this->input->post('raffles_featured'));
 
+            $raffles_isfree = str_replace(",", "", htmlspecialchars($this->input->post('raffles_isfree')));
 
-            if ($this->raffles_model->updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user,  $raffles_featured)) {
+            // Cashback
+            $raffles_cashback = htmlspecialchars($this->input->post('raffles_cashback'));
+            $raffles_cashback_amount = htmlspecialchars($this->input->post('raffles_cashback_amount'));
+
+
+
+            if ($this->raffles_model->updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user,  $raffles_featured,   $raffles_isfree,  $raffles_cashback, $raffles_cashback_amount,  $raffles_image_featured)) {
                 $response =  array('status' => 'true', 'message' => 'Sorteio atualizado com sucesso!');
             } else {
                 $response =  array('status' => 'false', 'message' => 'Ocorreu um erro inesperado.');
@@ -567,6 +634,23 @@ class Painel extends CI_Controller
     }
 
 
+    public function act_get_raffle() {
+        $raffles_id = htmlspecialchars($this->input->post('raffles_id'));
+
+
+        if ($this->raffles_model->getRaffle($raffles_id)) {
+
+            
+
+            $response = $this->raffles_model->getRaffle($raffles_id);
+        } else {
+
+            $response =  array('status' => 'false', 'message' => 'Nenhum sorteio encontrado');
+        }
+
+        print_r(json_encode($response));
+    }
+
 
 
 
@@ -647,7 +731,7 @@ class Painel extends CI_Controller
             $user_id = htmlspecialchars($this->input->post('user_id'));
             $user_credit = htmlspecialchars($this->input->post('user_credit'));
 
-
+            $user_email_old = $this->user_model->getUserById($user_id)['user_email'];
 
             // Validations
             $validate_email = $this->register_model->validate_email($user_email);
@@ -664,9 +748,7 @@ class Painel extends CI_Controller
 
             if (is_numeric($user_credit)) {
 
-                if ($validate_email != FALSE || $user_email == $this->session->userdata('session_user')['user_email']) {
-
-
+                if ($validate_email != FALSE || $user_email == $user_email_old) {
 
                     //Creating user
                     if ($this->register_model->updateUser($user_id, $user_name, $user_surname, $user_email,  $user_ddd, $user_phone, $user_credit)) {
@@ -676,8 +758,8 @@ class Painel extends CI_Controller
 
                         $response =  array('status' => 'false', 'message' => 'Ocorreu um erro. Tente mais tarde.');
                     }
-                } else {
 
+                } else {
                     $response =  array('status' => 'false', 'message' => 'Este e-mail já está sendo usado.');
                 }
             } else {
@@ -689,5 +771,151 @@ class Painel extends CI_Controller
 
             print_r(json_encode($response));
         }
+    }
+
+    public function act_get_affiliate_detalhes() {
+        $receiver = htmlspecialchars($this->input->post('receiver'));
+
+        $user_data = $this->user_model->getUserById($receiver);
+
+        echo '
+<div class="grid place-items-end">
+<button id="close-modal" onclick="closeModal()" class="bg-red-500 mt-5 px-3 py-3 text-white" >X</button>
+
+</div>
+
+            <h3 class="text-xs font-bold text-white mb-5 uppercase ">Detalhamento do Afiliado</h3>
+
+            <div class="grid grid-cols-2">
+                <div class="col-span-1">
+                    <label for="" class="text-orange  mt-2 font-semibold">NOME DO AFILIADO</label>
+                    <p class="text-white">'.$user_data['user_name'].' '.$user_data['user_surname'].'</p>
+                </div>
+                <div class="col-span-1">
+                    <label for="" class="text-orange  mt-2 font-semibold">CPF</label>
+                    <p class="text-white">'.$user_data['user_cpf'].'</p>
+                </div>
+                <div class="col-span-1">
+                    <label for="" class="text-orange  mt-2 font-semibold">E-MAIL</label>
+                    <p class="text-white">'.$user_data['user_email'].'</p>
+                </div>
+                <div class="col-span-1">
+                    <label for="" class="text-orange  mt-2 font-semibold">NÚMERO DE CADASTROS OBTIDO</label>
+                    <p class="text-white">'.count($this->admin_model->cadastrosTotaisByUser($user_data['user_affiliate'])           ).'</p>
+                </div>
+            </div>
+            <br>
+            <hr>
+<br>             
+<h3 class="text-xs font-bold text-white mb-5 uppercase ">Detalhamento PARA PAGAMENTO</h3>
+
+            <div class="grid grid-cols-2">
+                <div class="col-span-1">
+                    <label for="" class="text-orange  mt-2 font-semibold">PIX TIPO</label>
+                    <p class="text-white"> '.$user_data['user_pix_type'].'</p>
+                </div>
+                <div class="col-span-1">
+                    <label for="" class="text-orange  mt-2 font-semibold">PIX CHAVE</label>
+                    <p class="text-white">'.$user_data['user_pix_key'].'</p>
+                </div>
+            
+            </div>
+            <br>
+            <hr>
+            <br>
+
+            <p class="mt-5 font-semibold text-orange ">REGISTRO DE COMISSÕES</p>
+
+            <div class="mt-5">
+                <table style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-white text-left "><small>ID DO PAGAMENTO</small></th>
+                            <th class="text-white text-left "><small>NOME DO PAGADOR</small></th>
+                            <th class="text-white text-left "><small>VALOR DA TRANSAÇAO </small></th>
+                            <th class="text-white text-left "><small>DATA DO PAGAMENTO </small></th>
+                            <th class="text-white text-left "><small>VALOR DA COMISSÃO</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+                    foreach ($this->admin_model->repassesPendentesById($user_data['id']) as $e) { 
+
+                         $paador = $this->user_model->getUserById($e->comission_receiver); 
+
+                    echo'
+                    
+                        <tr>
+                            <td>
+                                <small class="text-center text-white">#'.$e->comission_payment_id.'</small>
+                            </td>
+                            <td>
+                                <small class="text-center text-white">'.$paador['user_name'].' '.$paador['user_surname'].'</small>
+                            </td>
+                            <td>
+                                <small class="text-center text-white">R$ '.$e->comission_amount.'</small>
+                            </td>
+                            <td>
+                                <small class="text-center text-white">'.$e->comission_date.'</small>
+                            </td>
+                            <td>
+                                <small class="text-center text-white">R$ '.$e->comission.'</small>
+                            </td>
+
+                        </tr>
+                        ';
+                    }
+                    echo '</tbody>
+                </table>
+
+
+            </div>
+            <div>
+            </div>
+        
+        ';
+
+    }
+
+    public function act_confirmar_repasse()
+    {
+        $receiver = htmlspecialchars($this->input->post('receiver'));
+
+        // Pegando valor total
+        $comission_amount = $this->admin_model->repassesPendentesByUser($receiver);
+
+        // Atualiza status
+        $this->admin_model->confirmaRepasseUsuario($receiver);
+
+        // Adicionar Historico
+
+        if ($this->admin_model->addConcluidoHistorico($receiver, $comission_amount )) {
+            $response =  array('status' => 'true', 'message' => 'Repasse Concluido.');
+        } else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu ao concluir o repasse.');
+        }
+
+        print_r(json_encode($response));
+    }
+
+    public function act_update_affiliate_settings()
+    {
+        $c_active = htmlspecialchars($this->input->post('c_active'));
+        $c_porcentage = htmlspecialchars($this->input->post('c_porcentage'));
+
+
+        $data = array(
+            'c_active' => $c_active,
+            'c_porcentage' => $c_porcentage
+        );
+
+
+        if ($this->admin_model->updateAffiliateSetting($data)) {
+            $response =  array('status' => 'true', 'message' => 'Atualizado com sucesso.');
+        } else {
+            $response =  array('status' => 'false', 'message' => 'Ocorreu um erro ao atualizar.');
+        }
+
+        print_r(json_encode($response));
     }
 }

@@ -9,6 +9,11 @@ class user_model extends CI_Model
 
     }
 
+    public function getUserAffiliate($user_affiliate) {
+        $this->db->where('user_affiliate', $user_affiliate);
+        return $this->db->get('users')->row_array();
+    }
+
     public function getUserByToken($user_token) {
         $this->db->where('user_token', $user_token);
         return $this->db->get('users')->row_array();

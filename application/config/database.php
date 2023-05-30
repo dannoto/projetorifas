@@ -106,7 +106,7 @@ if (ENVIRONMENT == "production") {
 		'hostname' => 'localhost',
 		'username' => 'root',
 		'password' => '',
-		'database' => 'rifas',
+		'database' => 'betraffle',
 		'dbdriver' => 'mysqli',
 		'dbprefix' => '',
 		'pconnect' => FALSE,

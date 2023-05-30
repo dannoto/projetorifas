@@ -22,7 +22,6 @@ class Carrinho extends CI_Controller
 		$this->load->model('admin_model');
 
 		$this->user_model->Auth();
-
 	}
 
 	public function index()
@@ -282,9 +281,15 @@ class Carrinho extends CI_Controller
 			}
 		}
 
+		$raffles_data = $this->raffles_model->getRaffle($cart_raffle);
+
 
 		//Calculando Total do Carrinho neste Sorteio
-		$cart_amount = (count($this->cart_model->getCartTickets($cart_raffle, $cart_user)) * $ticket_value);
+		if ($raffles_data['raffles_isfree'] == 1) {
+			$cart_amount = 0;
+		} else {
+			$cart_amount = (count($this->cart_model->getCartTickets($cart_raffle, $cart_user)) * $ticket_value);
+		}
 
 
 		//Adicionando Sorteio ao Carrinho

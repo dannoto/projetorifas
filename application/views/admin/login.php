@@ -10,8 +10,8 @@
     <!-- Navbar -->
     <?php $this->load->view('comp/sidebar');?>
 
-    <section>
-        <div class="grid place-items-center xl:mr-44 xl:ml-44  login xl:m-0 m-8">
+    <section  class="xl:mt-32 mt-32">
+                <div class="grid place-items-center xl:mr-44 xl:ml-44  login xl:m-0 m-8">
             
             <form action="" class="" id="form-login">
                 <div>

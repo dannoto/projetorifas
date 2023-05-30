@@ -74,4 +74,15 @@ class Home extends CI_Controller {
 
 		}
 	}
+
+	public function act_add_clique() {
+		
+		$ref = $this->input->post('ref');
+		$user_id = $_SERVER['REMOTE_ADDR'];
+
+
+		$this->register_model->add_affiliate_link($ref, $user_id);
+
+
+	}
 }

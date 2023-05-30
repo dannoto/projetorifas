@@ -168,6 +168,10 @@ class Notificacoes extends CI_Controller
             //Limpando carrinho ticket.
             $this->cart_model->resetCartTicketsByUser($user_data['id']);
 
+               // Adicionando comissão
+               $comission_receiver = $this->user_model->getUserByAffiliate($user_data['user_ref'])['id'];
+               $this->register_model->addComission($payment_data['id'], $comission_receiver, $user_data['id'], $order_data['order_amount'] );
+
             // Enviando E-mail
             $this->email_model->paymentApproved($user_data, $order_data);
         } else if ($data->status == "rejected") {

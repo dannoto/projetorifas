@@ -61,7 +61,7 @@
 
     <?php if (count($cart) > 0) { ?>
 
-        <section>
+    <section  class="xl:mt-32 mt-24">
             <div class="grid xl:grid-cols-3 grid-cols-1">
 
                 <div class="xl:col-span-2 col-span-1">
@@ -156,18 +156,30 @@
                             <p class="text-white  text-xl">TOTAL</p>
                             <p class="text-white  text-xl">R$ <?= $this->cart_model->getTotalCart() ?></p>
                         </div>
+                        <?php if ($this->cart_model->getTotalCart() == 0) { ?>
 
-                        <div class="xl:ml-5 xl:mr-5 mb-0 xl:mt-0 mt-5  m-3">
-                            <button onclick="createOrder()" class="bg-orange text-black mb-5 font-bold w-full  px-3 py-3">CONCLUIR PAGAMENTO <i class="fas ml-3  fa-chevron-right text-black"></i></button>
-                        </div>
+                                <div class="xl:ml-5 xl:mr-5 mb-0 xl:mt-0  m-3">
+                                    <form action="<?= base_url() ?>pagamentos/credito" method="POST">
+                                        <input name="credito" type="hidden">
+                                        <button type="submit" class="bg-green-500 text-white mb-5 font-bold w-full  px-3 py-3">CONCLUIR COMPRA GRÁTIS</button>
+                                    </form>
+                                </div>
+                  
 
-                        <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_credit'] >= $this->cart_model->getTotalCart()) { ?>
-                            <div class="xl:ml-5 xl:mr-5 mb-0 xl:mt-0  m-3">
-                                <form action="<?= base_url() ?>pagamentos/credito" method="POST">
-                                    <input name="credito" type="hidden">
-                                    <button type="submit" class="bg-green-500 text-white mb-5 font-bold w-full  px-3 py-3">PAGAR COM MEUS CRÉDITOS</button>
-                                </form>
+                        <?php } else { ?>
+
+                            <div class="xl:ml-5 xl:mr-5 mb-0 xl:mt-0 mt-5  m-3">
+                                <button onclick="createOrder()" class="bg-orange text-black mb-5 font-bold w-full  px-3 py-3">CONCLUIR PAGAMENTO <i class="fas ml-3  fa-chevron-right text-black"></i></button>
                             </div>
+
+                            <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_credit'] >= $this->cart_model->getTotalCart()) { ?>
+                                <div class="xl:ml-5 xl:mr-5 mb-0 xl:mt-0  m-3">
+                                    <form action="<?= base_url() ?>pagamentos/credito" method="POST">
+                                        <input name="credito" type="hidden">
+                                        <button type="submit" class="bg-green-500 text-white mb-5 font-bold w-full  px-3 py-3">PAGAR COM MEUS CRÉDITOS</button>
+                                    </form>
+                                </div>
+                            <?php } ?>
                         <?php } ?>
 
                     </div>
@@ -177,7 +189,7 @@
 
     <?php } else { ?>
 
-        <section>
+        <section  class="xl:mt-32 mt-24">
             <div class="text-center bg-darkLight">
                 <p class="text-white text-xl font-semibold uppercase pt-20">Carrinho Vazio</p>
 
@@ -221,7 +233,7 @@
 
                     if (resp.status == "true") {
 
-                        const mp = new MercadoPago( '<?=$this->admin_model->getGateways()['gateway_me_public']?>', {
+                        const mp = new MercadoPago('<?= $this->admin_model->getGateways()['gateway_me_public'] ?>', {
                             locale: 'pt-BR'
                         });
                         const checkout = mp.checkout({

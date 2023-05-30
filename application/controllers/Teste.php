@@ -125,7 +125,7 @@ class Teste extends CI_Controller
 
         // require_once("includes/ActiveCampaign.class.php");
 
-        $ac = new ActiveCampaign("https://natanecommerce.api-us1.com", "0a3a1c0dd5d2d870006368934c42c80f42cb06885cbdd56b2db12d912665efe791c100aa");
+        $ac = new ActiveCampaign("ccoanalitica.api-us1.com", "1b5a7e8977733ac82f16f86eebd298af6778e1003db0342d686c1f5439eaa2cd77ba4414");
 
         /*
          * TEST API CREDENTIALS.
@@ -148,26 +148,6 @@ class Teste extends CI_Controller
         print_r($account);
         echo "</pre>";
 
-        $list = array(
-            "name"           => "Betraffle",
-            "sender_name"    => "Betraffles",
-            "sender_addr1"   => "Street",
-            "sender_city"    => "Rio de Janeiro",
-            "sender_zip"     => "1141212",
-            "sender_country" => "BRL",
-        );
-
-        $list_add = $ac->api("list/add", $list);
-
-        if (!(int)$list_add->success) {
-          
-echo "false";
-        } else {
-
-            return (int)$list_add->id;
-        }
-        // print_r($list_add);
-
 
         // Add List
         // $add_lista = $this->addList($ac);
@@ -188,7 +168,7 @@ echo "false";
         // }
 
         // Send Email
-        // $send_email = $this->sendEmail($ac);
+        $send_email = $this->sendEmail($ac);
 
         // if ($send_email) {
         // } else {

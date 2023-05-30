@@ -24,10 +24,36 @@ class raffles_model extends CI_Model
     }
     
     public function getAllUserWithTickets($raffles_id) {
-        // $this->db->order_by('raffles_id', $raffles_id);
-        // return $this->db->get('raffles_buyed')->result();
-        $data = $this->db->query('SELECT DISTINCT raffles_user FROM raffles_buyed WHERE raffles_id='.$raffles_id);
-        return $data->result_array();
+        $this->db->distinct();
+        $this->db->select('raffles_user');
+        $this->db->from('raffles_buyed');
+        $this->db->where('raffles_id', $raffles_id);
+       return $this->db->get()->result();
+
+    }
+
+    public function addCronRun($raffles_id) {
+
+        $data = array(
+            'raffles_id' => $raffles_id
+        );
+
+        return $this->db->insert('cron_raffles', $data );
+
+    }
+
+    public function getRafflesReadyToRun() {
+        $this->db->like('raffles_progress', 100);
+        $this->db->like('raffles_status_random', 1);
+        return $this->db->get('raffles')->result();
+    }
+
+    public function addCashback($raffles_user, $raffles_cashback_amount) {
+        
+        $this->db->set('user_credit', 'user_credit + ' . $raffles_cashback_amount, false);
+        $this->db->where('id', $raffles_user);
+
+        return $this->db->update('users');
     }
 
     public function getRaffles() {
@@ -63,7 +89,7 @@ class raffles_model extends CI_Model
 
     }
 
-    public function addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured) {
+    public function addRaffle($raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured,  $raffles_isfree,  $raffles_cashback, $raffles_cashback_amount,  $raffles_image_featured) {
 
         $data = array(
             'raffles_title' => $raffles_title, 
@@ -78,33 +104,41 @@ class raffles_model extends CI_Model
             'raffles_date' => $raffles_date, 
             'raffles_time' => $raffles_time, 
             'raffles_user' => $raffles_user,
-            'raffles_featured' => $raffles_featured
+            'raffles_featured' => $raffles_featured,
+            'raffles_cashback' => $raffles_cashback,
+            'raffles_cashback_amount' => $raffles_cashback_amount,
+            'raffles_isfree' => $raffles_isfree,
+            'raffles_image_featured' => $raffles_image_featured
         );
 
         return $this->db->insert('raffles', $data);
 
     }
 
-    public function updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured) {
+    public function updateRaffle($raffles_id, $raffles_title, $raffles_description, $raffles_image, $raffles_tickets, $raffles_tickets_limit, $raffles_tickets_value, $raffles_status_publish, $raffles_status_random, $raffles_category, $raffles_date, $raffles_time, $raffles_user, $raffles_featured,   $raffles_isfree,  $raffles_cashback, $raffles_cashback_amount,  $raffles_image_featured) {
 
         $this->db->where('id', $raffles_id);
 
-        if (strlen($raffles_image) > 0 ) {
+        if (strlen($raffles_image) > 0  && strlen($raffles_image_featured) > 0 ) {
 
             $data = array(
                 'raffles_title' => $raffles_title, 
                 'raffles_description' => $raffles_description, 
-                'raffles_image' => $raffles_image, 
                 'raffles_tickets' => $raffles_tickets,
                 'raffles_tickets_limit' => $raffles_tickets_limit, 
                 'raffles_tickets_value' => $raffles_tickets_value, 
                 'raffles_status_publish' => $raffles_status_publish, 
                 'raffles_category' => $raffles_category, 
-                'raffles_featured' =>  $raffles_featured
+                'raffles_featured' =>  $raffles_featured,
+                'raffles_cashback' => $raffles_cashback,
+                'raffles_cashback_amount' => $raffles_cashback_amount,
+                'raffles_isfree' => $raffles_isfree,
+                'raffles_image' => $raffles_image, 
+                'raffles_image_featured' => $raffles_image_featured
                 
             );
 
-        } else {
+        } else if (strlen($raffles_image) == 0  && strlen($raffles_image_featured) == 0 ) {
             
             $data = array(
                 'raffles_title' => $raffles_title, 
@@ -114,10 +148,46 @@ class raffles_model extends CI_Model
                 'raffles_tickets_value' => $raffles_tickets_value, 
                 'raffles_status_publish' => $raffles_status_publish, 
                 'raffles_category' => $raffles_category, 
-                'raffles_featured' =>  $raffles_featured
+                'raffles_featured' =>  $raffles_featured,
+                'raffles_cashback' => $raffles_cashback,
+                'raffles_cashback_amount' => $raffles_cashback_amount,            
+            );
+        } else if (strlen($raffles_image) > 0  && strlen($raffles_image_featured) == 0 ) {
 
+            $data = array(
+                'raffles_title' => $raffles_title, 
+                'raffles_description' => $raffles_description, 
+                'raffles_tickets' => $raffles_tickets,
+                'raffles_tickets_limit' => $raffles_tickets_limit, 
+                'raffles_tickets_value' => $raffles_tickets_value, 
+                'raffles_status_publish' => $raffles_status_publish, 
+                'raffles_category' => $raffles_category, 
+                'raffles_featured' =>  $raffles_featured,
+                'raffles_cashback' => $raffles_cashback,
+                'raffles_cashback_amount' => $raffles_cashback_amount,
+                'raffles_isfree' => $raffles_isfree,
+                'raffles_image' => $raffles_image, 
                 
             );
+
+        } else if (strlen($raffles_image) == 0  && strlen($raffles_image_featured) > 0 ) {
+
+            $data = array(
+                'raffles_title' => $raffles_title, 
+                'raffles_description' => $raffles_description, 
+                'raffles_tickets' => $raffles_tickets,
+                'raffles_tickets_limit' => $raffles_tickets_limit, 
+                'raffles_tickets_value' => $raffles_tickets_value, 
+                'raffles_status_publish' => $raffles_status_publish, 
+                'raffles_category' => $raffles_category, 
+                'raffles_featured' =>  $raffles_featured,
+                'raffles_cashback' => $raffles_cashback,
+                'raffles_cashback_amount' => $raffles_cashback_amount,
+                'raffles_isfree' => $raffles_isfree,
+                'raffles_image_featured' => $raffles_image_featured
+                
+            );
+
         }
 
         return $this->db->update('raffles', $data);
@@ -163,21 +233,29 @@ class raffles_model extends CI_Model
     }
 
 
-    public function getRafflesRelated ($raffles_category) {
+    public function getRafflesRelated ($raffles_category, $raffle_id = null) {
         $this->db->where('raffles_category', $raffles_category);
         $this->db->order_by('id','rand');
         $this->db->where('raffles_status_random','1');
         $this->db->where('raffles_status_publish','1');
+
+        if ($raffle_id != null) {
+            $this->db->where('id !=', $raffle_id);
+        }
 
         $this->db->limit(3);
         return $this->db->get('raffles')->result();
     }
 
 
-    public function getRafflesRelatedRandom(){
+    public function getRafflesRelatedRandom($raffle_id = null){
         $this->db->order_by('id','rand');
         $this->db->where('raffles_status_random','1');
         $this->db->where('raffles_status_publish','1');
+
+        if ($raffle_id != null) {
+            $this->db->where('id !=', $raffle_id);
+        }
 
         $this->db->limit(3);
         return $this->db->get('raffles')->result();
@@ -264,4 +342,3 @@ class raffles_model extends CI_Model
     }
 
 }
-?>

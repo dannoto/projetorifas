@@ -17,7 +17,7 @@
 
 
 
-    <section>
+    <section  class="xl:mt-32 mt-32">
 
 
         <h1 style="font-size:25px ;" class="text-xl text-5x1 text-left font-semibold text-white xl:ml-32 ml-12">Meus Pagamentos</h1>
