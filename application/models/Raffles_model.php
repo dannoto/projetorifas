@@ -23,12 +23,20 @@ class raffles_model extends CI_Model
         return $this->db->get('raffles_winners')->result();
     }
     
-    public function getAllUserWithTickets($raffles_id) {
-        $this->db->distinct();
-        $this->db->select('raffles_user');
-        $this->db->from('raffles_buyed');
+    public function getAllUserWithTickets($raffles_id, $winner = null) {
+    //     $this->db->distinct();
+    //     $this->db->select('raffles_user');
+    //     $this->db->from('raffles_buyed');
+    //     $this->db->where('raffles_id', $raffles_id);
+    //     $this->db->where('raffles_user !=', $winner);
+
+    //   return $this->db->get()->result();*
+    
+    
         $this->db->where('raffles_id', $raffles_id);
-       return $this->db->get()->result();
+        $this->db->where('raffles_user !=', $winner);
+        
+        return $this->db->get('raffles_buyed')->result();
 
     }
 
@@ -149,6 +157,7 @@ class raffles_model extends CI_Model
                 'raffles_status_publish' => $raffles_status_publish, 
                 'raffles_category' => $raffles_category, 
                 'raffles_featured' =>  $raffles_featured,
+                 'raffles_isfree' => $raffles_isfree,
                 'raffles_cashback' => $raffles_cashback,
                 'raffles_cashback_amount' => $raffles_cashback_amount,            
             );

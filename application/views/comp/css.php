@@ -17,8 +17,8 @@
             font-size: 16px;
             font-weight: 400;
             line-height: 1.8;
-            /* color: #666; */
-            color:#FFF
+            color: #666;
+            /* color:#FFF */
         }
 
         @font-face {

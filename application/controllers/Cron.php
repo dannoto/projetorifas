@@ -54,7 +54,7 @@ class Cron extends CI_Controller
 
 
                 //Usuario data
-                $user_data = $this->user_model->getUserById($usuario_sorteado);
+                $user_data_vecndor = $this->user_model->getUserById($usuario_sorteado);
 
                 //Dados do Sorteio
                 $raffles_data = $this->raffles_model->getRaffle($raffle_id);
@@ -73,18 +73,18 @@ class Cron extends CI_Controller
 
 
                     //Enviando e-mail para o vencedor
-                    $this->email_model->winnerRaffle($user_data, $raffles_data);
+                    $this->email_model->winnerRaffle($user_data_vencedor, $raffles_data);
 
 
 
                     // Cashback
                     if ($raffles_data['raffles_cashback'] == 1) {
 
-                        foreach ($this->raffles_model->getAllUserWithTickets($raffle_id) as $c) {
+                        foreach ($this->raffles_model->getAllUserWithTickets($raffle_id, $usuario_sorteado ) as $c) {
 
 
                             // Retornando cashback em creditos]
-                            $raffles_cashback_amount = round(($raffles_data['raffles_tickets_value'] * ($raffles_data['raffles_cashback_amount'] / 100)), 2);
+                            $raffles_cashback_amount = round(($c->raffles_amount * ($raffles_data['raffles_cashback_amount'] / 100)), 2);
                             $this->raffles_model->addCashback($c->raffles_user, $raffles_cashback_amount);
                         }
 
@@ -145,7 +145,7 @@ class Cron extends CI_Controller
 
 
             //Usuario data
-            $user_data = $this->user_model->getUserById($usuario_sorteado);
+            $user_data_vencedor = $this->user_model->getUserById($usuario_sorteado);
 
             //Dados do Sorteio
             $raffles_data = $this->raffles_model->getRaffle($raffle_id);
@@ -164,21 +164,21 @@ class Cron extends CI_Controller
 
 
                 //Enviando e-mail para o vencedor
-                $this->email_model->winnerRaffle($user_data, $raffles_data);
+                $this->email_model->winnerRaffle($user_data_vencedor, $raffles_data);
 
 
 
                 // Cashback
                 if ($raffles_data['raffles_cashback'] == 1) {
 
-                    foreach ($this->raffles_model->getAllUserWithTickets($raffle_id) as $c) {
+                    foreach ($this->raffles_model->getAllUserWithTickets($raffle_id, $usuario_sorteado ) as $c) {
 
 
                         // Retornando cashback em creditos]
-                        $raffles_cashback_amount = round(($raffles_data['raffles_tickets_value'] * ($raffles_data['raffles_cashback_amount'] / 100)), 2);
+                        $raffles_cashback_amount = round(($c->raffles_amount * ($raffles_data['raffles_cashback_amount'] / 100)), 2);
                         $this->raffles_model->addCashback($c->raffles_user, $raffles_cashback_amount);
                     }
-
+                    
                     $response =  array('status' => 'true', 'message' => 'Sorteio concluído com sucesso. Cashback de ' . $raffles_data['raffles_cashback_amount'] . '% foi atribuído.');
                 } else {
 

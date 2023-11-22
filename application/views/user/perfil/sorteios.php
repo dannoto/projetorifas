@@ -5,6 +5,52 @@
     <?php $this->load->view('comp/css');?>
 
 </head>
+<style>
+    .body-bg-alt {
+        background-color: #28293D;
+    }
+
+    #selected-tickets {
+        width: 400px;
+        max-width: 400px;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 15px
+    }
+
+    @media (max-width:820px) {
+        #selected-tickets {
+            width: 250px;
+            max-width: 250px;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 15px
+        }
+    }
+
+    #selector-groups,
+    #selected-tickets {
+        border-radius: 16px;
+    }
+
+    .selected-ticket {
+        user-select: none;
+        background-color: #FFBD0A;
+        border-radius: 16px;
+        font-family: Nunito;
+        font-size: 16px;
+        font-weight: 600;
+        color: #FFFFFF;
+        padding: 0px 8px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+</style>
+
 <body class="bg-dark">
     <!-- Navbar -->
     <?php $this->load->view('comp/navbar');?>
@@ -37,7 +83,6 @@
                                             </div>
                                             <div class="xl:col-span-2 ml-2">
                                                 <h1 class="text-orange font-semibold xl:mt-0 mt-3 text-xl line-clamp-1"><?=$raffle['raffles_title']?></h1>
-                                                <p class="text-white line-clamp-2"><?=$raffle['raffles_description']?></p>
                                                 <div class="flex space-x-2 ml-5 xl:mb-0 mb-5 mt-2">
                                                     <span class="text-white"><i class="fal fa-ticket text-orange"></i> <?=count($this->payments_model->checkBuyedTickets($raffle['id'], $this->session->userdata('session_user')['id'] ))?> Tickets</span>
                                                     <i class="fa-solid fa-circle-small"></i>
@@ -45,7 +90,18 @@
                                                     <span class="text-orange">●</span>
                                                     <span class="text-orange">Em Andamento</span>
                                                 </div>
+                                                <div class="flex m-3 ">
+                                                        <div id="selected-tickets" class="body-bg-alt">
+            
+                                                            <?php foreach ($this->payments_model->checkBuyedTickets($raffle['id'], $this->session->userdata('session_user')['id'] ) as $t) { ?>
+                                                                <div id="selected-ticket" onclick="" class="flex selected-ticket" data-n="<?= $t->ticket_number ?>"><?= $t->ticket_number ?></div>
+                                                            <?php } ?>
+            
+                                                        </div>
+
+                                                     </div>
                                             </div>
+                                              
                                         </div>
                                     </li>
                                 </a>
@@ -80,7 +136,6 @@
                                             </div>
                                             <div class="xl:col-span-2 ml-2">
                                                 <h1 class="text-orange font-semibold xl:mt-0 mt-3 text-xl line-clamp-1"><?=$raffle['raffles_title']?></h1>
-                                                <p class="text-white line-clamp-2"><?=$raffle['raffles_description']?></p>
                                                 <div class="flex space-x-2 ml-5 xl:mb-0 mb-5 mt-2">
                                                     <span class="text-white"><i class="fal fa-ticket text-orange"></i> <?=count($this->payments_model->checkBuyedTickets($raffle['id'], $this->session->userdata('session_user')['id'] ))?> Tickets</span>
                                                     <i class="fa-solid fa-circle-small"></i>
@@ -101,8 +156,20 @@
                                                         <?php } ?>
 
                                                     <?php } ?>
+                                                    
 
                                                 </div>
+                                                 <div class="flex m-3 ">
+                                                        <div id="selected-tickets" class="body-bg-alt">
+            
+                                                            <?php foreach ($this->payments_model->checkBuyedTickets($raffle['id'], $this->session->userdata('session_user')['id'] ) as $t) { ?>
+                                                                <div id="selected-ticket" onclick="" class="flex selected-ticket" data-n="<?= $t->ticket_number ?>"><?= $t->ticket_number ?></div>
+                                                            <?php } ?>
+            
+                                                        </div>
+
+                                                     </div>
+
                                             </div>
                                         </div>
                                     </li>

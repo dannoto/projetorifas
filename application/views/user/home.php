@@ -15,7 +15,7 @@
     .highlight-selected-category {
         border-radius: 16px;
         background-color: #FFBD0A;
-        opacity: 0.8;
+        opacity: 1;
         color: #FFF !important;
     }
 
@@ -23,7 +23,7 @@
         cursor: pointer;
         font-size: 20px;
         color: #FFF !important;
-        opacity: 0.8;
+        opacity: 1;
         margin-bottom: 10px;
         margin-right: 10px;
     }
@@ -43,17 +43,40 @@
     }
 
     .featured-black {
-        background-color:black;opacity:0.7;height:350px;left:0;right:0;top:0;position:absolute;width:97%;z-index: 2;margin-left:1.6%
-    }
+  background-color: black;
+  opacity: 0.7;
+  height: 350px;
+  left: 0;
+  right: 0;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  /* margin-left: 1.6%; */
+  background-size: cover;
+  background-position: center center; /* Adicionado para centralizar a imagem de fundo */
+}
 
-    @media(max-width:1000px) {
-        .featured-black {
-            background-color:black;opacity:0.7;height:350px;left:0;right:0;top:0;position:absolute;width:100% !important;z-index: 2;
-    }
+@media (max-width: 1000px) {
+  .featured-black {
+    background-color: black;
+    opacity: 0.7;
+    height: 350px;
+    left: 0;
+    right: 0;
+    top: 0;
+    position: absolute;
+    width: 100% !important;
+    z-index: 2;
+    background-size: cover;
+    background-position: center center; /* Adicionado para centralizar a imagem de fundo */
+  }
+}
+
     .highlight-selected-category {
         border-radius: 16px;
         background-color: #FFBD0A;
-        opacity: 0.8;
+        opacity: 1;
         color: #FFF !important;
     }
 
@@ -61,11 +84,11 @@
         cursor: pointer;
         font-size: 20px;
         color: #FFF !important;
-        opacity: 0.8;
+        opacity: 1;
         margin-bottom: 10px;
         margin-right: 10px;
     }
-    }
+    
 </style>
 
 <body class="bg-dark">
@@ -84,17 +107,15 @@
 
                 <?php foreach ($this->raffles_model->getRafflesFeatured()  as $t) { ?>
                     <a href="<?= base_url() ?>sorteio/<?= $t->id ?>">
-                        <div class="xl:col-span-1 col-span-1 xl:m-0 m-3 ml-1 " style="position:relative;z-index: 1;">
-                            <!-- <div class="ml-5 mr-5">
-                                <img src="<?= base_url() ?>assets/img/raffles/<?= $t->raffles_image ?>" style="width:100%;max-width:100%;object-fit:cover;height:300px;" alt="">
-                                </div> -->
+                        <div class="xl:col-span-1 col-span-1 xl:m-0 m-3  " style="position:relative;z-index: 1;">
+                        
 
 
-                            <div class="xl:ml-5 xl:mr-5 ml-2 p-3 bg-darkLight mb-5" style="background-image:url(<?= base_url() ?>assets/img/raffles/<?= $t->raffles_image_featured ?>);background-repeat:none; height:350px;object-fit:cover;background-position:center">
+                            <div class="bg-darkLight mb-5" style="background-image:url(<?= base_url() ?>assets/img/raffles/<?= $t->raffles_image_featured ?>);background-repeat:none; height:350px;object-fit:cover;background-position:center">
                                 <div style="" class="featured-black">
 
                                 </div>
-                                <div class="xl:w-1/3 xl:ml-12" style="z-index: 9999;position:absolute;">
+                                <div class="xl:w-1/3 xl:ml-12 p-3" style="z-index: 9999;position:absolute;">
                                     <p class="text-xl py-2 mt-12 mb-3 text-white font-bold line-clamp-2"><?= $t->raffles_title ?></p>
                                     <?php if ( $t->raffles_isfree == 1) { ?>
                                     <p class="text-orange text-xl tbaset-xl font-bold" style="font-size:25px">GRÁTIS</p>

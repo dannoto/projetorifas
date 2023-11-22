@@ -114,6 +114,16 @@
         .cky-notice-btn-wrapper {
             margin-top: 15px;
         }
+
+        .footer {
+            font-size: 12px;
+        }
+
+        .footer li{
+           
+            font-weight: 100 !important;
+
+        }
     }
 </style>
 <div class="cky-consent-container cky-classic-bottom" style="display: none;">
@@ -187,7 +197,7 @@
                 <h1>Contato</h1>
                 <ul>
 
-                    <li><i class="fas fa-phone ml-2"></i> (11) 9999-9999</li>
+                    <!--<li><i class="fas fa-phone ml-2"></i> (11) 9999-9999</li>-->
                     <li><i class="fas fa-envelope ml-2"></i> sac@exemplo.com</li>
 
                 </ul>
@@ -225,8 +235,8 @@
 
         </div>
         <br>
-        <hr>
-        <br>
+        <!-- <hr>
+        <br> -->
         <div class="grid grid-cols-2   ">
 
             <div class="xl:col-span-1  mb-3  mt-5 ml-8 ">
@@ -250,7 +260,7 @@
             <div class="xl:col-span-1 mt-5 ml-8 ">
                 <h1>Categorias</h1>
                 <ul>
-                    <li> <a href="<?= base_url() ?>#sorteios"> Dinheiro </a></li>
+                    <li> <a href="<?= base_url() ?>#sorteios"> <p style="font-weight:100">Dinheiro</p> </a></li>
                     <li> <a href="<?= base_url() ?>#sorteios"> Tecnologia </a></li>
                     <li> <a href="<?= base_url() ?>#sorteios"> Viagens </a></li>
                     <li> <a href="<?= base_url() ?>#sorteios"> Eletrodomésticos </a></li>
@@ -260,8 +270,8 @@
                 <h1>Contato</h1>
                 <ul>
 
-                    <li><i class="fas fa-phone ml-2"></i> (11) 9999-9999</li>
-                    <li><i class="fas fa-envelope ml-2"></i> sac@exemplo.com</li>
+                    <!-- <li> (11) 9999-9999</li> -->
+                    <li>sac@betraffle.com.br</li>
 
                 </ul>
             </div>

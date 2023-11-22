@@ -12,6 +12,12 @@
         /* margin-bottom: 0px;
         font-weight: 300; */
     }
+    
+    select {
+    width: 100%;
+    height: 50px;
+    margin-top: 20px;
+}
 </style>
 <body class="bg-dark">
     <!-- Navbar -->
@@ -76,7 +82,31 @@
                         <input type="password" name="user_password_confirm" id="user_password_confirm" required class="pl-2" minlength="6" maxlength="200" placeholder="******">
                     </div>
                 </div>
-                <div class="form-group mt-3 mb-3 m-2">
+                
+                  
+                
+             <p class="mt-2 ml-2 text-white">Informações Financeiras</p>
+             <small class="ml-2 text-white">Cadastre seu pix para recebimentos futuros.</small>
+                 <div class="grid grid-cols-3 mt-3">
+                    <div class="col-span-1 m-2">
+                        <label for="" class="text-white">Tipo</label><br>
+                         <select required class="pl-2 mt-5" name="user_pix_type" id="user_pix_type">
+                            <option value="">Selecionar</option>
+                            <option value="cpf">CPF</option>
+                            <option value="cnpj">CNPJ</option>
+                            <option value="email">E-MAIL</option>
+                            <option value="celular">CELULAR</option>
+                            <option value="aleatorio">CHAVE ALEATÓRIA</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 m-2">
+                        <label for="" class="text-white">Chave Pix</label>
+                        <input type="text" required name="user_pix_key" id="user_pix_key" required class="pl-2" minlength="" maxlength="200" placeholder="">
+                       
+                    </div>
+                </div>
+                
+                <div class="form-group mt-10 mb-3 m-2 ">
                     <div>
                         <label class="form-check-label" for="id_marketing_0">
                             <small class="text-white"> Gostaria de receber atualizações emocionantes sobre sorteios, promoções de parceiros, descontos exclusivos e ingressos grátis!</small>
@@ -101,7 +131,7 @@
                     <button class="bg-orange text-white  font-semibold">CRIAR UMA CONTA</button>
                 </div>
                 <div class="mt-2 m-3 mt-5">
-                    <small class="text-white">Ao criar uma conta, você concorda que tem pelo menos 18 anos de idade, e leu, aceita e concorda com os <a href="" class="text-orange">Termos e Condições</a> e a <a href="" class="text-orange">Política de Privacidade</a>.</small>
+                    <small class="text-white">Ao criar uma conta, você concorda que tem pelo menos 18 anos de idade, e leu, aceita e concorda com os <a href="<?= base_url() ?>termos" class="text-orange">Termos e Condições</a> e a <a href="<?= base_url() ?>privacidade" class="text-orange">Política de Privacidade</a>.</small>
                 </div>
 
 

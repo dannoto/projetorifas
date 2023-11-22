@@ -4,6 +4,13 @@
     <title>Conta</title>
     <?php $this->load->view('comp/css');?>
 </head>
+<style>
+    select {
+    width: 100%;
+    height: 50px;
+    margin-top: 20px;
+}
+</style>
 <body class="bg-dark">
     <!-- Navbar -->
     <?php $this->load->view('comp/navbar');?>
@@ -53,6 +60,28 @@
                     </div>
                 </div>
 
+      
+             <p class="mt-2 ml-2 text-white">Informações Financeiras</p>
+             <small class="ml-2 text-white">Cadastre seu pix para recebimentos futuros.</small>
+                 <div class="grid grid-cols-3 mt-3">
+                    <div class="col-span-1 m-2">
+                        <label for="" class="text-white">Tipo</label><br>
+                         <select required class="pl-2 mt-5" name="user_pix_type" id="user_pix_type">
+                            <option value="">Selecionar</option>
+                            <option <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_pix_type'] == "cpf") { echo "selected";}?> value="cpf">CPF</option>
+                            <option <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_pix_type'] == "cnpj") { echo "selected";}?> value="cnpj">CNPJ</option>
+                            <option <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_pix_type'] == "email") { echo "selected";}?> value="email">E-MAIL</option>
+                            <option <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_pix_type'] == "celular") { echo "selected";}?> value="celular">CELULAR</option>
+                            <option <?php if ($this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_pix_type'] == "aleatorio") { echo "selected";}?> value="aleatorio">CHAVE ALEATÓRIA</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 m-2">
+                        <label for="" class="text-white">Chave Pix</label>
+                        <input type="text" required name="user_pix_key" id="user_pix_key" required class="pl-2" minlength="" maxlength="200" value="<?=$this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_pix_key']?>"  placeholder="">
+                       
+                    </div>
+                </div>
+                
                 <div class="m-2">
                     <button class="bg-orange text-white  font-semibold">ATUALIZAR</button>
                 </div>

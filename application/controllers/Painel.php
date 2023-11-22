@@ -449,7 +449,7 @@ class Painel extends CI_Controller
             $raffles_time = date('H:i:s');
             $raffles_featured = htmlspecialchars($this->input->post('raffles_featured'));
 
-            $raffles_isfree = str_replace(",", "", htmlspecialchars($this->input->post('raffles_isfree')));
+            $raffles_isfree = $this->input->post('raffles_isfree');
 
             // Cashback
             $raffles_cashback = htmlspecialchars($this->input->post('raffles_cashback'));

@@ -37,6 +37,11 @@ class Registro extends CI_Controller
 			$user_affiliate = mt_rand();
 			$user_ref = htmlspecialchars($this->input->post('user_ref'));
 			$user_ip = $this->register_model->getUserIP();
+			
+			
+			$user_pix_type = htmlspecialchars($this->input->post('user_pix_type'));
+			$user_pix_key = htmlspecialchars($this->input->post('user_pix_key'));
+
 
 			$marketing = htmlspecialchars($this->input->post('marketing'));
 
@@ -63,7 +68,7 @@ class Registro extends CI_Controller
 						if ($validate_phone) {
 
 							//Creating user
-							if ($this->register_model->addUser($user_name, $user_surname, $user_email, $user_cpf, $user_ddd, $user_phone, $user_password, $user_ref, $user_ip, $user_affiliate)) {
+							if ($this->register_model->addUser($user_name, $user_surname, $user_email, $user_cpf, $user_ddd, $user_phone, $user_password, $user_ref, $user_ip, $user_affiliate, $user_pix_type, $user_pix_key)) {
 
 								// Creating session
 								$auth = $this->login_model->Auth($user_email, $user_password);
@@ -137,7 +142,9 @@ class Registro extends CI_Controller
 			$user_id = $this->session->userdata('session_user')['id'];
 
 
-
+		$user_pix_type = htmlspecialchars($this->input->post('user_pix_type'));
+			$user_pix_key = htmlspecialchars($this->input->post('user_pix_key'));
+			
 			// Validations
 			$validate_email = $this->register_model->validate_email($user_email);
 
@@ -150,12 +157,14 @@ class Registro extends CI_Controller
 
 
 
-			if ($validate_email != FALSE || $user_email == $this->session->userdata('session_user')['user_email']) {
+			if ($validate_email != FALSE || $user_email == $this->user_model->getUserById($this->session->userdata('session_user')['id'])['user_email']) {
 
 
 
 				//Creating user
 				if ($this->register_model->updateUser($user_id, $user_name, $user_surname, $user_email,  $user_ddd, $user_phone)) {
+				    
+				    $this->register_model->updatePix($user_id, $user_pix_type, $user_pix_key);
 
 					$response =  array('status' => 'true', 'message' => 'Atualizado com sucesso');
 				} else {

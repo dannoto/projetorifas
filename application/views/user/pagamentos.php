@@ -27,9 +27,9 @@
             <br>
             <br>
 
-            <div class="col-span-1 xl:m-0 m-3">
+            <div class="col-span-1 xl:m-0 m-3"  style="overflow-x:scroll">
 
-                <table id="table_raffles" class="display text-white w-full">
+                <table id="table_raffles" class="display text-white">
                     <thead>
                         <tr>
                             <th class="text-white"><small>ID</small></th>

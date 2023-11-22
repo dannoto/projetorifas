@@ -2,7 +2,7 @@
 class register_model extends CI_Model
 {
 
-    public function addUser($user_name, $user_surname, $user_email, $user_cpf, $user_ddd, $user_phone, $user_password, $user_ref, $user_ip, $user_affiliate)
+    public function addUser($user_name, $user_surname, $user_email, $user_cpf, $user_ddd, $user_phone, $user_password, $user_ref, $user_ip, $user_affiliate, $user_pix_type, $user_pix_key)
     {
 
         $data = array(
@@ -20,11 +20,28 @@ class register_model extends CI_Model
             'user_time' => date('H:i:s'),
             'user_level' => 1,
             'user_token' => mt_rand(),
-            'user_affiliate' => $user_affiliate
+            'user_affiliate' => $user_affiliate,
+            'user_pix_type' => $user_pix_type,
+            'user_pix_key' => $user_pix_key
         );
 
 
         return $this->db->insert('users', $data);
+    }
+    
+    public function updatePix($user_id, $user_pix_type, $user_pix_key) {
+        
+          $this->db->where('id', $user_id);
+
+       
+            $data = array(
+             'user_pix_type' => $user_pix_type,
+            'user_pix_key' => $user_pix_key
+            );
+
+        return $this->db->update('users', $data);
+
+        
     }
 
     public function updateUser($user_id, $user_name, $user_surname, $user_email,  $user_ddd, $user_phone, $user_credit = null)
@@ -40,7 +57,8 @@ class register_model extends CI_Model
 
                 'user_ddd' => $user_ddd,
                 'user_phone' => $user_phone,
-                'user_credit' => $user_credit
+                'user_credit' => $user_credit,
+                
 
             );
         } else {
@@ -51,6 +69,7 @@ class register_model extends CI_Model
 
                 'user_ddd' => $user_ddd,
                 'user_phone' => $user_phone,
+           
 
             );
         }

@@ -4,7 +4,7 @@
 <head>
     <title>Meus Sorteios</title>
     <?php $this->load->view('comp/css'); ?>
-    <script src="https://cdn.tiny.cloud/1/224i9xb15ye58frm0ue0n7blg3rknu4x67spqueknzyct53o/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/iqu3uiofpxmar8p4ni5b3uzak7a2kfn54a98gjkwqa0zvkiw/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 </head>
 
@@ -155,7 +155,7 @@
                                 <div class="col-span-1 ml-2">
                                     <br>
                                     <label class="text-white " for="">Limite de Compra</label><br>
-                                    <input type="number" min="0" max="100" name="raffles_tickets_limit" id="add_raffles_tickets_limit" required class="p-2 mt-2 xl:w-2/3  border bg-dark border-orange text-white"> <span class="text-white">%</span>
+                                    <input type="number" min="0" max="1000000" name="raffles_tickets_limit" id="add_raffles_tickets_limit" required class="p-2 mt-2 xl:w-2/3  border bg-dark border-orange text-white"> <span class="text-white">UND.</span>
                                 </div>
                             </div>
                             <br>
@@ -299,7 +299,7 @@
                                 <div class="col-span-1 ml-2">
                                     <br>
                                     <label class="text-white " for="">Limite de Compra</label><br>
-                                    <input type="number" min="0" max="100" name="raffles_tickets_limit" id="update_raffles_tickets_limit" required class="p-2 mt-2 xl:w-2/3  border bg-dark border-orange text-white"> <span class="text-white">%</span>
+                                    <input type="number" min="0" max="1000000" name="raffles_tickets_limit" id="update_raffles_tickets_limit" required class="p-2 mt-2 xl:w-2/3  border bg-dark border-orange text-white"> <span class="text-white">UND.</span>
                                 </div>
                             </div>
                             <br>
@@ -369,6 +369,7 @@
                                 </div>
                             </div>
                             <br>
+                            <button class="bg-green-500 text-white font-semobold p-2" onclick="runRaffle()"> RODAR SORTEIO MANUALMENTE</button>
 
 
                         </div>

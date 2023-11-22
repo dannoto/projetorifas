@@ -19,7 +19,7 @@
                         </a>
                     </div>
                     <div class="ml-8">
-                        <a href="<?= base_url() ?>#sorteios">
+                        <a href="<?= base_url() ?>perfil/sorteios">
                             <p class="text-white font-bold text-xl">Meus Sorteios</p>
                         </a>
                     </div>

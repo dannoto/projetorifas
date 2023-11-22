@@ -15,6 +15,10 @@
         width: 40px;
     }
 
+    body {
+        color: #FFF
+    }
+
     .on {
         display: block;
     }
@@ -169,6 +173,16 @@
         cursor: pointer;
         margin-right: 10px;
     }
+
+    .modal-content {
+        border:2px solid #FFF;margin-top: 120px;
+    }
+
+    @media(max-width:1000px) {
+        .modal-content {
+        border:2px solid #FFF;margin-top: 82px;
+    }
+    }
 </style>
 
 <body class="bg-dark" style="overflow-x:hidden">
@@ -234,7 +248,7 @@
                     <?php } ?>
                 </div>
                 <div class="mt-1 mb-5">
-                    <div class="mb-4">
+                    <div class="mb-4 xl:p-5 p-5" style="overflow-x: hidden;">
 
                         <div class="percentage_sold_bubble_container" style="width: 60.32064128256513%;
                             margin-bottom: 15px; text-align: center;
@@ -284,13 +298,13 @@
                         <?php $winner_user = $this->user_model->getUserById($winner['winner_user']) ?>
 
 
-                        <div class="grid grid-cols-2 bg-green-500 mt-3 mb-3 ">
+                        <div class="grid grid-cols-3 bg-green-500 mt-3 mb-3 " style="max-width: 100%;overflow-x:hidden">
                             <div class="col-span-1 m-3">
                                 <!-- <center> <i class="fal fa-trophy  text-center text-white" style="font-size: 70px"></i></center> -->
-                                <p class="text-white  text-center font-bold" style="font-size: 60px"><?= $winner['winner_ticket'] ?></p>
+                                <p class="text-white  text-center font-bold pt-3" style="font-size: 50px"><?= $winner['winner_ticket'] ?></p>
 
                             </div>
-                            <div class="col-span-1 m-3">
+                            <div class="col-span-2 m-3">
                                 <p class=" font-bold uppercase text-black">vencedor</p>
                                 <p class="text-white font-semibold"><?= $winner_user['user_name'] ?> <?= $winner_user['user_surname'] ?></p>
 
@@ -440,7 +454,7 @@
     <div id="myModal" class="modal border border-white">
 
         <!-- Modal content -->
-        <div class="modal-content" style="border:2px solid #FFF">
+        <div class="modal-content" style="">
             <span class="close">&times;</span>
 
             <div class="grid place-items-center mb-5">
